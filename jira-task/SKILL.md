@@ -65,6 +65,10 @@ If the user asks for multiple tasks in a single file, combine them into one file
 
 When the multiple tasks belong to the same epic or initiative, apply the situate-in-context guidance from step 3 to each task — readers won't see the file-level intro once tickets are imported individually.
 
+## Epics
+
+If the user requests an epic, produce a title and description only — no requirements section — and keep the description to one or two paragraphs.
+
 ## Audience override
 
 The default audience is a mix of product and engineering. If the user specifies a different audience (e.g. "write this for a junior dev" or "this is for leadership"), adjust the tone and detail level accordingly.
