@@ -8,8 +8,8 @@ description: Group changes into commits and write commit messages in the user's 
 ## Workflow
 
 1. **Run `git status` and `git diff`** (staged + unstaged) to see all changes.
-2. **Propose groupings + draft messages BEFORE committing.** Show the user one block per planned commit — files included, draft message — and wait for approval. Adjust based on feedback, then commit.
-3. **Skip step 2** if the user said "one commit" / "single commit" / "squash these" — just draft the one message and confirm.
+2. **Propose groupings + draft messages BEFORE committing.** Show one block per planned commit — files included, draft message — and wait for approval. Adjust based on feedback, then commit.
+3. **Skip step 2** when the user signals they don't need to see the plan first ("one commit", "single commit", "squash these", "just commit it") — draft the message(s) and commit.
 
 ## Grouping
 
@@ -17,15 +17,31 @@ Each commit should be a cohesive set of changes that reads clearly when scanning
 
 ## Message style
 
-- One line. 1-2 sentences max. No body.
-- Imperative, capitalized. No trailing period on a single sentence; use a period only to separate multiple sentences.
-- Lead with the action and scope. Add detail only when it helps a reviewer scanning history.
-- **No `Co-Authored-By` trailer. Ever.**
+The default is **plain imperative subject lines** — short, specific, no decoration:
 
-Examples:
 - `Add account page with auth-gated route and nav link`
 - `Fix fetchAuthMe to handle non-JSON responses from /.auth/me`
-- `Add account page`
+- `Co-locate MSAL components and hook under shared/auth/`
+
+Rules:
+
+- One line. Capitalized imperative. No trailing period (unless splitting two sentences).
+- Lead with the verb. Add detail only when it helps a reviewer scanning history.
+- No `chore(scope):` / `fix(frontend):` / `refactor:` prefixes.
+- No body. No `Co-Authored-By` trailer.
+
+### Overrides
+
+Deviate from the default only in these cases:
+
+1. **Explicit instruction.** The user asks for a different style for this commit ("use conventional commits", "add a body explaining X", "include Co-Authored-By"). Follow what they asked.
+2. **Strong repo convention.** The user's own recent commits consistently use another style. Check before deviating:
+
+   ```
+   git log --author="$(git config user.name)" --oneline -20
+   ```
+
+   Only infer style from the user's own commits — not from merge commits or other contributors. When in doubt, ask.
 
 ## Committing
 
