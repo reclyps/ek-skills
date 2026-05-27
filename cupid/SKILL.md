@@ -31,6 +31,7 @@ Scale the investigation to the target. A full Explore sweep on a 3-file PR tends
 
 - **Small PR / file-level review:** read the diff and its immediate surroundings directly. Skip the parallel Explore agents unless the changeset genuinely reaches across many files.
 - **Larger PR, directory, or whole codebase:** launch the two parallel Explore agents below.
+- **Very large target where analytical depth is the bottleneck (opt-in):** after the two context agents return, optionally fan out one evaluator agent per CUPID principle (5 total) — each receives the gathered context plus the principle's definition from [CUPID-PRINCIPLES.md](CUPID-PRINCIPLES.md) and produces a finished section in the [Evaluation structure](#evaluation-structure) format. The main thread then stitches the five sections together and writes the summary table + highest-impact improvements. Use this mode only when the user asks for it or when synthesis in a single thread would clearly be the bottleneck — it trades redundant reads and possible cross-section style drift for genuinely parallel analysis.
 
 **Agent 1 — Target code:**
 > Thoroughly explore [target]. Read representative files across the target. Investigate: component/module structure, naming conventions, API surface area, dependency patterns, type usage, test coverage, error handling, domain modeling, file organization. Read actual file contents, not just names.

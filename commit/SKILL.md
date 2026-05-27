@@ -27,6 +27,7 @@ Rules:
 
 - One line. Capitalized imperative. No trailing period (unless splitting two sentences).
 - Lead with the verb. Add detail only when it helps a reviewer scanning history.
+- Lead with what changed for a human reader. Identifiers (CVE numbers, ticket IDs, bare version bumps) belong in the PR description or branch name, not the subject. Prefer `Patch Next.js to address middleware auth bypass` over `Bump Next.js for CVE-2026-23870`.
 - No `chore(scope):` / `fix(frontend):` / `refactor:` prefixes.
 - No body. No `Co-Authored-By` trailer.
 

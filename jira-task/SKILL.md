@@ -14,9 +14,9 @@ Every task must include these sections in order. Separate each section with a bl
 
 **Description**
 
-<Default to a single paragraph (typically 3-6 sentences, scaling to complexity). Write as flowing narrative prose. Explain the background, why this work is needed, and what it achieves. The audience is a mix of product and engineering reading this on a Jira board — pitch to the lower-context reader so the description stays high-level. It should also orient cold readers who haven't seen sibling tickets when this task is part of a larger initiative.>
+<Default to a single paragraph (typically 3-6 sentences, scaling to complexity). Write as flowing narrative prose. Explain the background, why this work is needed, and what it achieves. The audience is a mix of product and engineering reading this on a Jira board, so pitch to the lower-context reader to keep the description high-level. It should also orient cold readers who haven't seen sibling tickets when this task is part of a larger initiative.>
 
-<Optional additional context — tables, diagrams, references, or supplementary detail — when it helps the reader understand the task. Include when the user provides it or when the task benefits from it, but do not add filler.>
+<Optional additional context (tables, diagrams, references, or supplementary detail) when it helps the reader understand the task. Include when the user provides it or when the task benefits from it, but do not add filler.>
 
 **Requirements**
 
@@ -27,9 +27,9 @@ Every task must include these sections in order. Separate each section with a bl
 
 ### 1. Assess whether you have enough context
 
-If the user's prompt clearly describes what the task is, why it matters, and roughly what it involves — write the task directly.
+If the user's prompt clearly describes what the task is, why it matters, and roughly what it involves, write the task directly.
 
-If the prompt is vague or missing key context (e.g. no "why", unclear scope, ambiguous technical approach), ask focused clarifying questions before writing. Ask only what you need to produce a good task — no more.
+If the prompt is vague or missing key context (e.g. no "why", unclear scope, ambiguous technical approach), ask focused clarifying questions before writing. Ask only what you need to produce a good task and nothing more.
 
 ### 2. Explore the codebase (when the task involves code changes)
 
@@ -43,15 +43,17 @@ Before writing requirements, explore the codebase to ground the task in reality.
 
 **Title**: Short, action-oriented (e.g. "Add Pagination to Search Results API").
 
-**Description**: Write for a mixed audience of product and engineering as flowing narrative prose. Explain the problem, the motivation, and what the task achieves at a high level. Default to a single paragraph. Do not include implementation details here — save those for requirements.
+**Description**: Write for a mixed audience of product and engineering as flowing narrative prose. Explain the problem, the motivation, and what the task achieves at a high level. Default to a single paragraph. Do not include implementation details here; save those for requirements.
 
-When the task is part of a larger initiative — an epic, a multi-ticket batch — situate it in that context (what the initiative is, what this task enables) so a reader who hasn't seen sibling tickets can still follow. Refer to related work by name, with a Jira link, or by natural sequence ("the App Configuration provisioning work", "in the previous task to provision X") rather than mechanical procedural framing ("this ticket replaces the prior ticket's stand-in").
+When the task is part of a larger initiative such as an epic or multi-ticket batch, situate it in that context (what the initiative is, what this task enables) so a reader who hasn't seen sibling tickets can still follow. Refer to related work by name, with a Jira link, or by natural sequence ("the App Configuration provisioning work", "in the previous task to provision X") rather than mechanical procedural framing ("this ticket replaces the prior ticket's stand-in").
 
-**Requirements**: Typically 4-8 bullets, but use as many as the task demands. Use nested bullets when a requirement needs clarification, sub-steps, or examples — but don't nest for the sake of it. Each top-level bullet should be a concrete, verifiable requirement. Include:
+**Requirements**: Typically 4-8 bullets, but use as many as the task demands. Use nested bullets when a requirement needs clarification, sub-steps, or examples, but don't nest for the sake of it. Each top-level bullet should be a concrete, verifiable requirement. Include:
 
 - What needs to happen, stated clearly enough that completion is unambiguous
-- For code tasks: relevant codebase context and hints (existing patterns to follow, specific files or utilities to use) — but leave room for the developer to explore and make their own decisions
+- For code tasks: relevant codebase context and hints (existing patterns to follow, specific files or utilities to use), but leave room for the developer to explore and make their own decisions
 - Constraints, gotchas, or acceptance criteria relevant to the task domain
+
+**Style**: Avoid em dashes where possible; prefer commas, parentheses, or sentence breaks.
 
 ### 4. Ask where to save
 
@@ -63,11 +65,11 @@ If the user asks for multiple tasks in one invocation, produce each as a separat
 
 If the user asks for multiple tasks in a single file, combine them into one file using `---` horizontal rules to separate each task. Each task keeps its own `# Title`, Description, and Requirements sections.
 
-When the multiple tasks belong to the same epic or initiative, apply the situate-in-context guidance from step 3 to each task — readers won't see the file-level intro once tickets are imported individually.
+When the multiple tasks belong to the same epic or initiative, apply the situate-in-context guidance from step 3 to each task, since readers won't see the file-level intro once tickets are imported individually.
 
 ## Epics
 
-If the user requests an epic, produce a title and description only — no requirements section — and keep the description to one or two paragraphs.
+If the user requests an epic, produce a title and description only (no requirements section) and keep the description to one or two paragraphs.
 
 ## Audience override
 
