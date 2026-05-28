@@ -1,6 +1,6 @@
 ---
 name: jira-task
-description: Write Jira task descriptions as structured markdown files. Explores the codebase for context when the task involves code changes. Use when user asks to write a task, create a ticket, draft a Jira story, or needs a task write-up for their board.
+description: Write Jira task descriptions as structured markdown files. Grounds tasks in the codebase when the work involves code changes. Use when user asks to write a task, create a ticket, draft a Jira story, or needs a task write-up for their board.
 ---
 
 # Jira Task Writer
@@ -14,9 +14,9 @@ Every task must include these sections in order. Separate each section with a bl
 
 **Description**
 
-<Default to a single paragraph (typically 3-6 sentences, scaling to complexity). Write as flowing narrative prose. Explain the background, why this work is needed, and what it achieves. The audience is a mix of product and engineering reading this on a Jira board, so pitch to the lower-context reader to keep the description high-level. It should also orient cold readers who haven't seen sibling tickets when this task is part of a larger initiative.>
+<Narrative-prose paragraph: background, motivation, and what the work achieves. See step 3 for full guidance.>
 
-<Optional additional context (tables, diagrams, references, or supplementary detail) when it helps the reader understand the task. Include when the user provides it or when the task benefits from it, but do not add filler.>
+<Optional additional context (tables, diagrams, references) when it helps the reader. Omit if it would be filler.>
 
 **Requirements**
 
@@ -31,9 +31,17 @@ If the user's prompt clearly describes what the task is, why it matters, and rou
 
 If the prompt is vague or missing key context (e.g. no "why", unclear scope, ambiguous technical approach), ask focused clarifying questions before writing. Ask only what you need to produce a good task and nothing more.
 
-### 2. Explore the codebase (when the task involves code changes)
+A detailed plan or a prior investigation in this session can satisfy this step (and shapes how much of step 2 you need).
 
-Before writing requirements, explore the codebase to ground the task in reality. Look for:
+### 2. Ground the task in the codebase (when the task involves code changes)
+
+Requirements must be grounded in the real codebase, not invented. Before writing them, take stock of the grounding you already hold:
+
+- If the prompt or a referenced plan already supplies verified specifics (file paths, conventions, constraints, gotchas), use them. Do not re-explore to rediscover what you already have, since that wastes effort and risks drifting from the plan.
+- Explore only to fill genuine gaps, or to spot-check claims you have reason to doubt (e.g. when the plan came from another author or an older session and may be stale). Verify a few load-bearing references rather than sweeping.
+- If you have no grounding at all, explore enough to find the relevant patterns, files, and constraints before writing.
+
+The goal is grounded requirements, not a fixed exploration pass. What to look for when you do explore:
 
 - Existing patterns and conventions the task should follow
 - Specific files, modules, or utilities relevant to the work
@@ -43,7 +51,7 @@ Before writing requirements, explore the codebase to ground the task in reality.
 
 **Title**: Short, action-oriented (e.g. "Add Pagination to Search Results API").
 
-**Description**: Write for a mixed audience of product and engineering as flowing narrative prose. Explain the problem, the motivation, and what the task achieves at a high level. Default to a single paragraph. Do not include implementation details here; save those for requirements.
+**Description**: Write for a mixed audience of product and engineering as flowing narrative prose. Explain the problem, the motivation, and what the task achieves at a high level. Default to a single paragraph (typically 3-6 sentences, scaling with complexity). Do not include implementation details here; save those for requirements.
 
 When the task is part of a larger initiative such as an epic or multi-ticket batch, situate it in that context (what the initiative is, what this task enables) so a reader who hasn't seen sibling tickets can still follow. Refer to related work by name, with a Jira link, or by natural sequence ("the App Configuration provisioning work", "in the previous task to provision X") rather than mechanical procedural framing ("this ticket replaces the prior ticket's stand-in").
 
