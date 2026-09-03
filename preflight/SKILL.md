@@ -32,12 +32,12 @@ List only what **this task** will actually use — not the world:
 
 ### 2. Run the deterministic checks
 
-`scripts/preflight.py` covers permissions + CLI presence/auth (it cannot call
-MCP). Pass the manifest; `--cwd` should be the **project root** so it finds the
-project's `.claude/settings.local.json` allowlist:
+`preflight.py` covers permissions + CLI presence/auth (it cannot call MCP). Pass
+the manifest; `--cwd` should be the **project root** so it finds the project's
+`.claude/settings.local.json` allowlist:
 
 ```bash
-python3 scripts/preflight.py \
+python3 ~/.claude/skills/preflight/scripts/preflight.py \
   --commands "git commit" "npm run build" "gh pr create" \
   --clis gh jq \
   --mcp Figma Atlassian \
@@ -49,6 +49,13 @@ prompt — no matching allow rule), or **RED** (denied / missing / auth failed),
 and exits non-zero if any item is amber or red. Permission matching is a
 documented heuristic that errs conservative — it reports a prompt rather than
 assuming an allow.
+
+**Always invoke the script by its installed path, never as relative
+`scripts/preflight.py`.** The cwd is the project root, not the skill directory,
+so the relative form only works if you happen to be sitting in the skill folder.
+On Windows: `python3 "$env:USERPROFILE\.claude\skills\preflight\scripts\preflight.py"`.
+If the skill is installed somewhere else, locate it first
+(`ls ~/.claude/skills/preflight/scripts/`) rather than guessing.
 
 ### 3. Probe MCP servers yourself
 
