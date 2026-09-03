@@ -33,8 +33,10 @@ For a behavioral/policy notice — especially one that **grandfathers existing c
 
 ### 3. Investigate (evidence-based)
 - Enumerate what the notice's criteria point at — candidate **resources** for a version/SKU/runtime notice; the **usage, consumers, and automation/processes** for a behavioral notice.
+- **Batch and pace the queries.** Prefer one wide read (`az resource list --query`, or `az graph query` where the resource-graph extension is available) over a per-resource `show` loop. ARM throttles wide fan-out with HTTP 429 — back off and retry rather than treating the failure as a verdict. A 429 is not "not found".
 - **Confirm actual deployed config, not just metadata.** When the affected property isn't visible in resource metadata, **escalate** — see [REFERENCE.md](REFERENCE.md) → **Investigation escalation ladder** (config API / Kudu → container image → source repo / IaC).
 - **Rule out false positives explicitly** (e.g. a runtime that doesn't use the affected feature at all).
+- **Resolve indirection before declaring anything orphaned or unused.** App settings and connection strings are frequently Key Vault references (`@Microsoft.KeyVault(SecretUri=…)`, `VaultName=…;SecretName=…`) — resolve them to the actual vault and secret before concluding a vault has no consumers. Resources also get renamed: a name from the email that doesn't resolve is not proof of absence. Search by resource ID or tag across resource groups, and check the activity log for a rename or move, before reporting anything as gone.
 - Record **evidence for every verdict** — both affected and not-affected.
 
 ### 4. Write the action plan
