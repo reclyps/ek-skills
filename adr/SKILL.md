@@ -88,7 +88,7 @@ Present the draft and ask if anything needs adjustment — missing context, inco
 ### 5. Write to file
 
 - If the user has already specified an output path, use it.
-- Otherwise, ask the user where they'd like the file written.
+- **Otherwise ask where to write it — always, before writing.** Do not infer a location from the repo's layout: an existing `docs/adr/` folder is not consent to add a tracked, reviewable document to it. Offer an untracked working location (e.g. an ignored `local/`) alongside the repo's ADR folder, and let the user pick.
 - Generate a descriptive kebab-case filename from the title (e.g., `adr-secret-expiry-notifications-via-event-grid.md`) unless the user specifies a name.
 - Default status to **Proposed** unless the user has specified otherwise (either explicitly or through framing — see step 1).
 - **Superseding an earlier ADR**: if this decision replaces a previous one, write a new file rather than editing the old one. Add a `Supersedes: [link to prior ADR]` line near the status, and ask the user whether to update the prior ADR's status to `Superseded` with a backlink to this one.
