@@ -29,6 +29,8 @@ For PR/branch targets, the review is about the *changeset*, not the full state o
 
 Scale the investigation to the target. A full Explore sweep on a 3-file PR tends to surface concerns that are out of scope for the changeset.
 
+If you are already running inside a subagent (e.g. a caller delegated this evaluation to an isolated context), skip the internal Explore fan-out and read the target directly — you already have a clean, scoped context, and nesting further agents adds cost without benefit.
+
 - **Small PR / file-level review:** read the diff and its immediate surroundings directly. Skip the parallel Explore agents unless the changeset genuinely reaches across many files.
 - **Larger PR, directory, or whole codebase:** launch the two parallel Explore agents below.
 - **Very large target where analytical depth is the bottleneck (opt-in):** after the two context agents return, optionally fan out one evaluator agent per CUPID principle (5 total) — each receives the gathered context plus the principle's definition from [CUPID-PRINCIPLES.md](CUPID-PRINCIPLES.md) and produces a finished section in the [Evaluation structure](#evaluation-structure) format. The main thread then stitches the five sections together and writes the summary table + highest-impact improvements. Use this mode only when the user asks for it or when synthesis in a single thread would clearly be the bottleneck — it trades redundant reads and possible cross-section style drift for genuinely parallel analysis.
