@@ -7,7 +7,7 @@ description: Produce a structured implementation plan markdown file from a Figma
 
 ## Quick start
 
-Run this when the user gives you a Figma URL and asks for a plan (not code). Output is a single markdown file the user can review, hand off, or feed into downstream skills like `/to-issues` and `/jira-task`.
+Run this when the user gives you a Figma URL and asks for a plan (not code). Output is a single markdown file the user can review, hand off, or feed into downstream skills like `/to-issues` and `/write-a-ticket`.
 
 ## Workflow
 
@@ -92,8 +92,8 @@ Ask the user where to save. Default filename: a slugified version of the design/
 
 Before delivering, scan the draft once for: any catalog frame missing from both build order and the deferred list, missing decisions in the trailer, paths or component names too vague to chain into tickets, open questions that the work actually resolved (move them out), and unfilled placeholders.
 
-The plan is meant to feed downstream skills like `/to-issues` and `/jira-task`. Keep file paths, component names, and architectural decisions specific enough to survive being broken into separate tickets.
+The plan is meant to feed downstream skills like `/to-issues` and `/write-a-ticket`. Keep file paths, component names, and architectural decisions specific enough to survive being broken into separate tickets.
 
 ## Chaining and explicit invocation
 
-Explicit invocation always overrides this skill's contextual triggers. If the user chains this skill with `/jira-task`, `/to-issues`, `/figma-implement-design`, or anything else, follow the chain — don't refuse, redirect, or insert steps they didn't ask for.
+Explicit invocation always overrides this skill's contextual triggers. If the user chains this skill with `/write-a-ticket`, `/to-issues`, `/figma-implement-design`, or anything else, follow the chain — don't refuse, redirect, or insert steps they didn't ask for.
