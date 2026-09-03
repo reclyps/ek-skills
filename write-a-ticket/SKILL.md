@@ -1,6 +1,6 @@
 ---
 name: write-a-ticket
-description: Write ticket content — title, description, requirements — as a structured markdown file. Tracker-agnostic and file-only: never calls a tracker API. Grounds the write-up in the codebase for code changes, or in operational reality (live state, prior investigation, IaC) for infra/ops/process work. Use when the user asks for a ticket, task, story, or epic write-up. To create the ticket in Jira, use the jira-task skill instead.
+description: Write ticket content — title, description, requirements — to a markdown file. Tracker-agnostic and file-only: never calls a tracker API, never creates anything. Use when the user wants the write-up itself: "write a ticket/task/story/epic", "draft a ticket", "turn this into a ticket", or when they want to review the wording before anything is filed. Grounds the write-up in the codebase for code changes, or in operational reality (live state, prior investigation, IaC) for infra/ops/process work, which default to high-level. Not for filing — creating the issue in Jira is the jira-task / jira-epic skills.
 ---
 
 # Ticket Writer
@@ -34,9 +34,13 @@ Two modes. The default is grounded-but-tight. The high-level mode trades specifi
 | Requirements state | What to build, grounded in the codebase or operational reality | The outcome / acceptance criteria |
 | Implementation specifics (files, utilities, params) | In sub-bullets, when they carry signal | Omitted |
 | Grounding (step 2) | Yes | Skip or keep light |
-| Use when | Approach is settled | Specifics may still change |
+| Use when | Approach is settled — the default for code work | Specifics may still change — the default for infra/ops/process work |
 
-Enter high-level mode when the user passes `--high-level` (or `--abstract`), or asks for it in words ("keep this high-level", "write it abstract", "the details aren't settled yet"). Otherwise use the default.
+Enter high-level mode when the user passes `--high-level` (or `--abstract`), or asks for it in words ("keep this high-level", "write it abstract", "the details aren't settled yet").
+
+**Infra, ops, process, and config tickets default to high-level.** That work is rarely as settled as it feels while drafting, and its specifics — a resource name, a portal step, an exact command — go stale between writing the ticket and picking it up. Keep step 2's operational grounding light: enough to name the real resources and constraints, not enough to script the steps. Drop to the default mode only when the user asks for the specifics, or the change genuinely is settled and mechanical.
+
+Code tickets use the default mode unless the user asks otherwise.
 
 ## Workflow
 
