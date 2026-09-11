@@ -3,10 +3,17 @@
 The linter counts the mechanical ones. This file explains what each signal means and covers the
 judgement calls a script cannot make.
 
-None of these is a rule to obey mechanically. Each is a habit that, in aggregate, makes prose feel
-machine-written and tiring. One em-dash is fine; forty in a document is a tell.
+**Flags default to fix.** Earlier versions of this file called them "signals, not errors" and told
+the drafter to use judgement. In practice that gave every flag an exit, and the tics shipped anyway.
+So: fix what the linter flags. Where a flag is genuinely a deliberate choice, keep it and name it in
+the handover with the reason. The user overrules the linter. The drafter does not.
+
+Individually none of these habits is a crime. One em-dash is fine; forty in a document is a tell.
+The aggregate is what makes prose feel machine-written and tiring to read.
 
 ## What the linter flags
+
+### Mechanical
 
 **Em-dash density.** The single strongest tell. Reach for a comma, a colon, or a full stop first.
 Above roughly one per 200 words, the prose starts to feel breathless. A document with 114 of them
@@ -16,29 +23,94 @@ was described by its reader as painful.
 reader feel shouted at, and it flattens emphasis so nothing stands out. Use headings for structure
 instead. Two or three across a long document is fine; one per paragraph is not.
 
-**Banned phrases.** Each is filler that adds no information:
+**Word count.** Reported, not enforced, and never something to write towards. The memo's target is a
+single page a manager reads once; cutting a working sentence to move the count trades the thing the
+memo is for against a proxy for it. A long memo has a section too many. The linter prints the rule
+alongside the count and only flags past about 1100 words.
+
+### Filler
+
+Phrases that add no information. Each pattern is a regex, so inflections and hyphen-or-space
+variants are caught too.
 
 | Phrase | Why it goes |
 | --- | --- |
-| "worth noting", "worth recording", "worth stating" | If it were not worth saying, it would not be in the document. Say the thing. |
+| "worth noting / recording / stating / mentioning" | If it were not worth saying, it would not be in the document. Say the thing. |
 | "It is worth" anything | Same. |
-| "load-bearing" | Jargon dressed as insight. |
-| "genuinely", "materially", "meaningfully" | Intensifiers that let a weak claim pass as a strong one. |
-| "That said", "Note that" | Filler transitions. |
-| "the cheapest ... to resolve" | Usually an unmeasured claim about effort. |
+| "genuinely", "materially", "meaningfully", "significantly" | Intensifiers that let a weak claim pass as a strong one. |
+| "That said", "Note that", "Of course", "Indeed", "To be clear" | Filler transitions. |
 | "in terms of" | Almost always deletable. |
-| "our own" | Pick one word. "Our" or "own", not both. |
+| "our own" | Pick one word. |
+| "may potentially", "it appears that", "somewhat", "relatively" | Hedges. State confidence once, then write plainly. |
 
-**Internal path references.** Any `local/`, `audit-notes/`, or bare `.md` link is broken the moment
-the document leaves the repository. Flagged whenever the destination is external.
+### Register
+
+The house voice of a model writing about engineering work. Not wrong, but unmistakable, and it
+reads as borrowed swagger in a report to a manager or to counsel.
+
+Operational verbs: **landed**, **shipped**, **rolled out**, **surfaced**, **wired up**. Say what
+happened. "Deployed on 3 September", "the review found three issues".
+
+Appraisal constructions: **is real**, **the real risk**, **load bearing**, **buys you**, **earns its
+place**, **carries weight**, **X beats Y**, **cheap to fix**. These assert importance rather than
+demonstrating it. Give the reader the fact and let them weigh it.
+
+Idiom the reader did not ask for: **non-trivial**, **first-class**, **under the hood**, **surface
+area**, **the ask**, **the delta**, **out of the box**, **at a high level**, **table stakes**,
+**moving parts**, **blast radius**, **happy path**.
+
+Corporate and brochure vocabulary: **leverage**, **utilize**, **robust**, **seamless**,
+**comprehensive**, **holistic**, **granular**, **actionable**. And the essay register a model falls
+into when it thinks it is being serious: **delve**, **underscore**, **pivotal**, **testament**,
+**landscape**, **realm**.
+
+### Structure
+
+The tells you cannot reach with a word list. These are what make a document read as model-written
+even after every banned phrase is gone.
+
+**Antithesis.** "It isn't a config problem; it's a design problem." "Not a bug, but a choice."
+"A recommendation, not a decision." The correction cadence: set up a wrong reading, knock it down,
+land on the right one. Once in a document is rhetoric. Four times is a tic. State the thing
+positively and delete the strawman.
+
+**Adverb-comma openers.** "Notably,", "Critically,", "Importantly,", "Crucially,", "Ultimately,",
+"In practice,", "Put simply,". They tell the reader how to feel about a sentence instead of writing
+a sentence worth feeling that way about. Delete the opener; the sentence survives.
+
+**Colon labels.** "The upshot:", "The catch:", "Bottom line:", "What this means:". A heading in
+disguise. Either it is a section, or it is a sentence.
+
+**Punchline fragments.** A three-word sentence dropped after a twenty-five-word one, for emphasis.
+"That matters." "It works." "Nobody checked." Effective once per document, exhausting at five.
+
+**Triads.** Three parallel clauses per sentence, three bullets per list, three examples per point.
+Recognisable and monotonous. Vary the count, and use two when there are two.
+
+**Repeated paragraph openers.** Four paragraphs starting "The" is a rhythm the reader feels without
+being able to name.
+
+**Cadence.** The deepest one, and the reason the others persist. Model prose parks at 15 to 25 words
+per sentence with very little variation, so every sentence lands with the same weight and the reader
+stops distinguishing between them. The linter reports mean, standard deviation, coefficient of
+variation, and the share of sentences in the 12-28 word band. Uniformity alone is fine in a terse
+memo; uniformity plus most of the document sitting in that band is the tell. The fix is not a
+rewrite, it is variance: put a six-word sentence next to a thirty-word one and let the short one
+carry the point.
+
+### References
 
 **Positional references.** "the middle column", "the first table", "the section above". Name the
 thing. Readers count differently, and structure changes.
 
-**Word count.** Not a limit, a check against the tier. A memo over about 700 words has stopped being
-a memo.
+**Internal paths.** Any `local/`, `audit-notes/`, or bare `.md` link breaks the moment the document
+leaves the repository. Ignore the flag if the destination is a repo file.
 
 ## What the linter cannot catch
+
+The QA pass covers the largest one — a summary claim the body does not support — by checking every
+assertive sentence against the material below it. See VERIFY.md. What follows is what neither the
+script nor that pass will reach.
 
 **Meta-commentary about the document.** Sentences describing the document's own construction:
 "Recorded so that a later reader does not re-derive this", "This section carries as much weight as
@@ -49,11 +121,6 @@ person. Delete.
 reads as hedging, and it buries the actual conclusion. Include one only where a reader might act
 differently if the counter-argument held.
 
-**Unsupported summary claims.** The most damaging failure, because it is invisible in the prose. A
-summary that says "mostly in the clear" above a body showing most cases failing is worse than no
-summary. After drafting, take each summary sentence and point at the section that supports it. If
-you cannot, the sentence is wrong.
-
 **Framing inherited from the prompt.** If the investigation began from a suspicion, phrases like
 "the problem we expected to find" and "the central hypothesis" will leak into the deliverable. The
 reader did not share the suspicion and should not have to unpick it. Report what is, not what was
@@ -62,11 +129,21 @@ feared.
 **Dead-end framing.** "This cannot be determined" ends the reader's options. "Ask X, who owns it"
 gives them one. Almost every unknown has a person attached; find them.
 
-**Triads and parallel lists.** Three parallel clauses per sentence, three bullets per list, three
-examples per point. Recognisable and monotonous. Vary the count, and use two when there are two.
+## Aim at
 
-**Hedged verbs.** "may potentially", "could arguably", "it appears that". State the confidence once,
-explicitly, then write plainly. A confidence marker in a table beats a hedge in every sentence.
+Proscription alone does not work. A model told to avoid twenty phrases produces a twenty-first. What
+the prose should look like:
+
+- **Sentences make claims a reader could disagree with.** "Retention exceeds the cap in three of
+  four systems" invites a check. "Retention is a real concern" does not.
+- **Verbs are literal.** Something was deployed, deleted, asked, refused, measured. It was not
+  surfaced, landed, or unlocked.
+- **Named actors and dates.** "Priya Raman expects to reply this week" beats "clarification is
+  pending".
+- **Length varies because the content varies.** A finding needs a clause; a caveat needs a
+  paragraph. Do not even them out.
+- **Nothing announces its own importance.** No "critically", no "the key point is". Put the
+  important thing first and let position do the work.
 
 ## Calibration
 
