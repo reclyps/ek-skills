@@ -1,6 +1,6 @@
 ---
 name: azure-notification-triage
-description: Triage an Azure notification email (Action required / Action recommended / End of support / retirement) — parse it, identify which of the user's Azure resources are genuinely affected with evidence, and write an action plan. Use when the user shares or points to an Azure notification/service-health email about a deprecation, retirement, end-of-support, migration, or behavioral change, and wants to know what to do about it. Investigates and plans only; does not execute changes.
+description: Triage an Azure notification email (Action required / Action recommended / End of support / retirement) — parse it, identify which of the user's Azure resources are actually affected with evidence, and write an action plan. Use when the user shares or points to an Azure notification/service-health email about a deprecation, retirement, end-of-support, migration, or behavioral change, and wants to know what to do about it. Investigates and plans only; does not execute changes.
 ---
 
 # Azure Notification Triage
@@ -44,9 +44,26 @@ For a behavioral/policy notice — especially one that **grandfathers existing c
 - Include: summary + deadline/urgency, affected resources (with evidence), **not-affected (with reasons)**, remediation steps, verification, rollback, open questions.
 - After writing, **offer** to also draft a tracker task/ticket from the plan (don't create one unprompted).
 
+### 5. Prose pass
+
+The file exists now, so run the prose pass over it.
+
+1. `scripts/check-prose.sh <file>` — see [PROSE.md](PROSE.md) for what each flag indicates. Flags
+   default to fix; keep one only deliberately, and say which and why.
+2. Hand the file to a subagent briefed with [REWRITE.md](REWRITE.md), pinned to Sonnet, telling it
+   the document is an Azure remediation action plan so it preserves the format. Then run the linter again on
+   the result.
+
+The plan is mostly tables and lists. Weigh the cadence, triad and punchline flags against the
+summary and the open questions, and ignore them where they land on the resource tables or the
+numbered remediation steps.
+
+The `prose-pass` skill is the same machinery if you want it on its own.
+
 ## Principles
 - The plan is the deliverable — don't make changes.
 - Azure emails are broad and often alarmist; the **not-affected list with reasons** is as valuable as the affected list.
 - Prefer read-only investigation. Confirm scope before touching anything outward-facing.
 
 See [REFERENCE.md](REFERENCE.md) for worked examples, the escalation ladder, auth patterns, and the plan template.
+

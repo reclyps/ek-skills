@@ -38,7 +38,7 @@ Two modes. The default is grounded-but-tight. The high-level mode trades specifi
 
 Enter high-level mode when the user passes `--high-level` (or `--abstract`), or asks for it in words ("keep this high-level", "write it abstract", "the details aren't settled yet").
 
-**Infra, ops, process, and config tickets default to high-level.** That work is rarely as settled as it feels while drafting, and its specifics — a resource name, a portal step, an exact command — go stale between writing the ticket and picking it up. Keep step 2's operational grounding light: enough to name the real resources and constraints, not enough to script the steps. Drop to the default mode only when the user asks for the specifics, or the change genuinely is settled and mechanical.
+**Infra, ops, process, and config tickets default to high-level.** That work is rarely as settled as it feels while drafting, and its specifics — a resource name, a portal step, an exact command — go stale between writing the ticket and picking it up. Keep step 2's operational grounding light: enough to name the real resources and constraints, not enough to script the steps. Drop to the default mode only when the user asks for the specifics, or the change really is settled and mechanical.
 
 Code tickets use the default mode unless the user asks otherwise.
 
@@ -59,7 +59,7 @@ Requirements must be grounded in reality, not invented. Where that grounding com
 **Code changes (the common case) — ground in the codebase.** Take stock of the grounding you already hold before exploring:
 
 - If the prompt or a referenced plan already supplies verified specifics (paths, conventions, constraints, gotchas), use them. Don't re-explore to rediscover what you already have.
-- Explore only to fill genuine gaps, or to spot-check claims you have reason to doubt (e.g. a plan from another author or an older session that may be stale). Verify a few load-bearing references rather than sweeping.
+- Explore only to fill real gaps, or to spot-check claims you have reason to doubt (e.g. a plan from another author or an older session that may be stale). Verify the few references the task depends on rather than sweeping.
 - With no grounding at all, explore enough to find the relevant patterns, files, and constraints before writing.
 
 What to look for when you do explore:
@@ -93,11 +93,27 @@ In high-level mode, requirements state outcomes and acceptance criteria, not the
 - Default: a short top-level bullet ("Add cursor-based pagination to the search endpoint") with sub-bullets for the params, the pagination pattern to follow, and the opaque-cursor constraint.
 - High-level: one bullet stating the outcome ("Search results can be paginated: clients request a bounded page size and page through all results in order"), no file or param specifics.
 
-**Style**: Avoid em dashes where possible; prefer commas, parentheses, or sentence breaks. Assume the reader has only the ticket: state a fact inline rather than citing a document they may not have. Shared repository paths are fine, runbooks and investigation notes and local working files are not.
+**Style**: Assume the reader has only the ticket: state a fact inline rather than citing a document they may not have. Shared repository paths are fine; runbooks, investigation notes and local working files are not. Em dashes and stray internal paths are the prose pass's job in step 5, not something to hand-police here.
 
 ### 4. Ask where to save
 
 Ask where to save the file. Default to a markdown file with a `task-` prefix and a slug from the title (e.g. `task-add-pagination-to-search-results.md`), but respect a naming preference if given.
+
+### 5. Prose pass
+
+The file exists now, so run the prose pass over it.
+
+1. `scripts/check-prose.sh <file>` — see [PROSE.md](PROSE.md) for what each flag indicates. Flags
+   default to fix; keep one only deliberately, and say which and why.
+2. Hand the file to a subagent briefed with [REWRITE.md](REWRITE.md), pinned to Sonnet, telling it
+   the document is a Jira ticket description so it preserves the format. Then run the linter again on
+   the result.
+
+Most of this file is not prose. Weigh the cadence, triad and punchline flags against the
+Description only, and ignore them where they land on Requirements bullets or a context table — those
+are meant to be clipped.
+
+The `prose-pass` skill is the same machinery if you want it on its own.
 
 ## Multiple tasks
 
@@ -114,3 +130,4 @@ If the user requests an epic, produce a title and description only (no requireme
 ## Audience override
 
 The default audience is a mix of product and engineering. If the user specifies another (e.g. "for a junior dev", "for leadership"), adjust tone and detail accordingly. This is independent of the detail-level mode.
+

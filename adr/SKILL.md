@@ -26,7 +26,7 @@ Check the conversation for prior discussion of the decision. If substantial cont
 - If the decision has distinct phases (short/mid/long-term), consider one ADR per phase rather than bundling.
 - Retroactive ADRs for existing systems are fine and often valuable.
 
-**Honor overrides from the user's prompt.** The default template and workflow below are a starting point, not a contract. When the user specifies how the ADR should be shaped, adjust the template, the interview, and the review step to match. Scope the interview to only what's load-bearing for the ADR the user actually wants. When in doubt, err toward honoring the user's framing rather than defending the default.
+**Honor overrides from the user's prompt.** The default template and workflow below are a starting point, not a contract. When the user specifies how the ADR should be shaped, adjust the template, the interview, and the review step to match. Scope the interview to what the ADR the user actually wants will contain. When in doubt, err toward honoring the user's framing rather than defending the default.
 
 Overrides can touch any dimension of the document. Categories to listen for:
 
@@ -93,6 +93,22 @@ Present the draft and ask if anything needs adjustment — missing context, inco
 - Default status to **Proposed** unless the user has specified otherwise (either explicitly or through framing — see step 1).
 - **Superseding an earlier ADR**: if this decision replaces a previous one, write a new file rather than editing the old one. Add a `Supersedes: [link to prior ADR]` line near the status, and ask the user whether to update the prior ADR's status to `Superseded` with a backlink to this one.
 
+### 6. Prose pass
+
+The file exists now, so run the prose pass over it.
+
+1. `scripts/check-prose.sh <file>` — see [PROSE.md](PROSE.md) for what each flag indicates. Flags
+   default to fix; keep one only deliberately, and say which and why.
+2. Hand the file to a subagent briefed with [REWRITE.md](REWRITE.md), pinned to Sonnet, telling it
+   the document is an ADR so it preserves the format. Then run the linter again on
+   the result.
+
+The ADR template's section headings are fixed by convention. The rewriter must not rename
+`Context`, `Decision`, `Alternatives Considered` or `Consequences`, and must not merge them. If the
+rewrite changes anything a reader would act on differently, show the user before you stop.
+
+The `prose-pass` skill is the same machinery if you want it on its own.
+
 ## Writing guidelines
 
 - **Brevity**: Keep to 1-2 pages. Link to supporting material rather than embedding it.
@@ -102,3 +118,4 @@ Present the draft and ask if anything needs adjustment — missing context, inco
 - **Consequences should be honest (when included)**: Include operational burdens, risks, and limitations — not just benefits.
 - **Alternatives should be fair (when included)**: Explain why each was considered, not just why it lost. Acknowledge their strengths.
 - **Append-only log**: Once an ADR is accepted, don't rewrite it. If the decision changes, supersede it with a new ADR and link the two. This preserves the history of the team's thinking.
+
