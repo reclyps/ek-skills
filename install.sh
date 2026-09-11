@@ -60,9 +60,74 @@ ours() {
     return 1
 }
 
+# Frontmatter sanity. Warns, never blocks — a skill that trips this still installs, and
+# some harnesses parse leniently enough not to care. The common break is a plain YAML
+# scalar containing ": ", which a strict parser reads as a nested mapping.
+check_frontmatter() {
+    local name="$1" f="$repo/$1/SKILL.md" line key val
+    local warned_here=0
+
+    if [ "$(head -1 "$f")" != "---" ]; then
+        echo "   warn $name — SKILL.md does not open with ---"
+        return 1
+    fi
+
+    # the frontmatter block, without its delimiters
+    local fm
+    fm="$(awk 'NR==1 && $0=="---" {next} /^---$/ {exit} {print}' "$f")"
+
+    if ! printf '%s\n' "$fm" | grep -q '^name:'; then
+        echo "   warn $name — frontmatter has no name:"
+        warned_here=1
+    else
+        local declared
+        declared="$(printf '%s\n' "$fm" | sed -n 's/^name:[[:space:]]*//p' | head -1 | tr -d '"'"'"' ')"
+        if [ -n "$declared" ] && [ "$declared" != "$name" ]; then
+            echo "   warn $name — frontmatter name is \"$declared\", directory is \"$name\""
+            warned_here=1
+        fi
+    fi
+
+    printf '%s\n' "$fm" | grep -q '^description:' || {
+        echo "   warn $name — frontmatter has no description:"
+        warned_here=1
+    }
+
+    # Unquoted scalars carrying ": ". Quoted values and block scalars are fine.
+    while IFS= read -r line; do
+        case "$line" in
+            [A-Za-z_]*:*) ;;
+            *) continue ;;
+        esac
+        key="${line%%:*}"
+        val="${line#*:}"
+        val="${val# }"
+        if [ -z "$val" ]; then continue; fi
+        first=$(printf '%s' "$val" | cut -c1)
+        # a quoted value, or a block scalar, may contain anything
+        if [ "$first" = '"' ] || [ "$first" = "'" ]; then continue; fi
+        if [ "$first" = '>' ] || [ "$first" = '|' ]; then continue; fi
+        case "$val" in
+            *': '*)
+                echo "   warn $name — $key: value contains \": \", which strict YAML parsers reject"
+                echo "        quote the value or reword; GitHub Copilot fails to load the skill"
+                warned_here=1
+                ;;
+        esac
+    done <<< "$fm"
+
+    return $warned_here
+}
+
 installed=0
 skipped=0
 pruned=0
+warned=0
+
+# Frontmatter is a property of the skill, not of where it lands, so check once.
+for name in "${skills[@]}"; do
+    check_frontmatter "$name" || warned=$((warned + 1))
+done
 
 for target in "${targets[@]}"; do
     echo "== $target"
@@ -120,5 +185,6 @@ done
 
 echo
 echo "${#skills[@]} skills × ${#targets[@]} targets: $installed installed, $pruned pruned, $skipped skipped"
+[ "$warned" -gt 0 ] && echo "$warned frontmatter warning(s) — installed anyway"
 [ "$dry" -eq 1 ] && echo "(dry run — nothing changed)"
 exit 0

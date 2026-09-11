@@ -30,6 +30,12 @@ reader follows the file symlinks inside it.
 Because the files are links, **editing a skill takes effect immediately**. Re-run `install.sh` only
 when a file or a skill is added, removed or renamed.
 
+It checks each skill's frontmatter and **warns without blocking**: a name that disagrees with its
+directory, a missing `name` or `description`, or an unquoted value containing `": "`. That last one
+is the one that bites — a plain YAML scalar cannot carry a colon-space, and a strict parser reads it
+as a nested mapping. Claude Code tolerates it; GitHub Copilot refuses to load the skill. Quoted
+values and block scalars are exempt, since those may contain anything.
+
 It touches nothing it did not create: installs are stamped with a `.ek-skills-managed` marker, and
 only marked directories are replaced or pruned. Skills installed by `npx skills` and hand-made
 directories are left alone.
