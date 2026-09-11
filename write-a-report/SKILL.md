@@ -30,7 +30,7 @@ One artefact rarely serves two audiences. Default to two, and say which is which
 
 **Research notes are attachments, not pages.** Working files written for your own use during
 investigation should be attached, not published. Ten pages of notes relabelled as deliverables is
-how a report becomes unreadable. If a note genuinely needs reading, rewrite it for a reader.
+how a report becomes unreadable. If a note needs reading, rewrite it for a reader.
 
 ## 3. Agree the argument
 
@@ -106,13 +106,19 @@ research, briefed with [REWRITE.md](REWRITE.md). Pin it to Sonnet.
 ### 2. The linter
 
 ```bash
-scripts/check-prose.sh <file> [memo|reference]
+scripts/check-prose.sh --max-words 1100 <memo>      # memo
+scripts/check-prose.sh <reference-document>         # no ceiling
 ```
 
 Six groups: mechanical, filler phrases, register (the ops and appraisal voice — landed, surfaced,
 is real, load bearing), structure (antithesis, adverb openers, colon labels, punchline fragments,
 triads, sentence cadence), positional references, and internal file paths.
 [PROSE.md](PROSE.md) explains what each indicates.
+
+The memo's real target is a single page a manager reads once and comes away with the gist and the
+takeaway, which is a test of the document rather than a number. The 1100-word ceiling is a backstop
+for when the page is clearly gone. Never cut or reword a working sentence to move the count — a long
+memo has a section too many, so drop one or move it to the reference document.
 
 **Flags default to fix.** Where a flag is a deliberate choice, keep it and name it in the handover
 with the reason. Deciding silently that a flag was intentional is how the tics ship.
