@@ -1,6 +1,6 @@
 ---
 name: write-a-ticket
-description: Write ticket content — title, description, requirements — to a markdown file. Tracker-agnostic and file-only: never calls a tracker API, never creates anything. Use when the user wants the write-up itself: "write a ticket/task/story/epic", "draft a ticket", "turn this into a ticket", or when they want to review the wording before anything is filed. Grounds the write-up in the codebase for code changes, or in operational reality (live state, prior investigation, IaC) for infra/ops/process work, which default to high-level. Not for filing — creating the issue in Jira is the jira-task / jira-epic skills.
+description: Write ticket content — title, description, requirements — to a markdown file. Tracker-agnostic and file-only; it never calls a tracker API and never creates anything. Use when the user wants the write-up itself, such as "write a ticket/task/story/epic", "draft a ticket", or "turn this into a ticket", or when they want to review the wording before anything is filed. Grounds the write-up in the codebase for code changes, or in operational reality (live state, prior investigation, IaC) for infra/ops/process work, which default to high-level. Not for filing — creating the issue in Jira is the jira-task / jira-epic skills.
 ---
 
 # Ticket Writer
