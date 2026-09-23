@@ -1,6 +1,7 @@
 # CUPID Principles Reference
 
-Based on Dan North's "CUPID — for joyful coding" (2022). This is the evaluator's rubric.
+Based on Dan North's "CUPID — for joyful coding" (2022). The detailed form of the five properties:
+what to look for, and the anti-patterns. The short, design-time form is in [SKILL.md](SKILL.md).
 
 ---
 

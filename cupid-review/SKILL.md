@@ -1,11 +1,15 @@
 ---
-name: cupid
-description: Evaluate code against CUPID software design principles (Composable, Unix Philosophy, Predictable, Idiomatic, Domain-Based). Use when user asks to evaluate code quality, review a feature/PR/branch against CUPID, or mentions "cupid".
+name: cupid-review
+description: Review existing code against the CUPID design properties (Composable, Unix Philosophy, Predictable, Idiomatic, Domain-Based) and report ratings, evidence, and scoped recommendations. Use when the user asks to evaluate code quality, review a feature/PR/branch/codebase against CUPID, or mentions "cupid review". To apply CUPID while designing or writing code rather than judging it, use cupid-principles instead.
 ---
 
-# CUPID Evaluation
+# CUPID Review
 
-Evaluate a target against the CUPID principles defined in [CUPID-PRINCIPLES.md](CUPID-PRINCIPLES.md).
+Review a target against the CUPID properties and report on it. This skill is the review procedure only — the properties themselves live in the **`cupid-principles`** skill.
+
+**First step:** call the Skill tool with `cupid-principles` to load the properties, then read its `CUPID-PRINCIPLES.md` for the per-property "what to look for" and anti-patterns. That file is the rubric for everything below, and lives at
+`~/.claude/skills/cupid-principles/CUPID-PRINCIPLES.md` — pass that path to any subagent you delegate part of
+the review to.
 
 ## Defaults (all overridable via prompt)
 
@@ -33,7 +37,7 @@ If you are already running inside a subagent (e.g. a caller delegated this evalu
 
 - **Small PR / file-level review:** read the diff and its immediate surroundings directly. Skip the parallel Explore agents unless the changeset genuinely reaches across many files.
 - **Larger PR, directory, or whole codebase:** launch the two parallel Explore agents below.
-- **Very large target where analytical depth is the bottleneck (opt-in):** after the two context agents return, optionally fan out one evaluator agent per CUPID principle (5 total) — each receives the gathered context plus the principle's definition from [CUPID-PRINCIPLES.md](CUPID-PRINCIPLES.md) and produces a finished section in the [Evaluation structure](#evaluation-structure) format. The main thread then stitches the five sections together and writes the summary table + highest-impact improvements. Use this mode only when the user asks for it or when synthesis in a single thread would clearly be the bottleneck — it trades redundant reads and possible cross-section style drift for genuinely parallel analysis.
+- **Very large target where analytical depth is the bottleneck (opt-in):** after the two context agents return, optionally fan out one evaluator agent per CUPID principle (5 total) — each receives the gathered context plus the principle's section from the `cupid-principles` skill's `CUPID-PRINCIPLES.md` and produces a finished section in the [Evaluation structure](#evaluation-structure) format. The main thread then stitches the five sections together and writes the summary table + highest-impact improvements. Use this mode only when the user asks for it or when synthesis in a single thread would clearly be the bottleneck — it trades redundant reads and possible cross-section style drift for genuinely parallel analysis.
 
 **Agent 1 — Target code:**
 > Thoroughly explore [target]. Read representative files across the target. Investigate: component/module structure, naming conventions, API surface area, dependency patterns, type usage, test coverage, error handling, domain modeling, file organization. Read actual file contents, not just names.
