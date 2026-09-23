@@ -1,9 +1,14 @@
 ---
 name: write-a-report
-description: Turn findings into a written report, memo, brief, or assessment for a human business audience — a manager, legal, a stakeholder — rather than for an agent to read back. Covers scoping the audience, agreeing the argument before drafting, tiering a memo against a reference document, neutral framing, and the finishing passes that strip model-written tics and verify the arithmetic and the claims. Use when the user asks for a report, memo, brief, executive summary, assessment, or findings write-up that someone else will read, or when existing research needs turning into something shareable through Confluence, email, or a doc. Not for Jira tickets (write-a-ticket), PRDs (write-a-prd), architecture decisions (adr), or for doing the research itself (research).
+description: Produce the two-document deliverable for a large research question the user has been assigned — a one-page memo for a decision-maker plus a reference document citing every finding — with argument sign-off before drafting and fresh-context rewrite and fact-check passes. Use only when the user names this skill or explicitly asks for a memo with a backing document. Not for Confluence pages, status notes, comparison tables, ticket write-ups or other ordinary write-ups; write those directly. Not for tickets (write-a-ticket), PRDs (write-a-prd), ADRs (adr), or the research itself (research).
+disable-model-invocation: true
 ---
 
 # Report Writer
+
+**When this applies.** Only for a large assigned research question where a memo plus a reference
+document is the deliverable, or when the user named this skill. If it loaded any other way, write
+the thing directly and mention `/write-a-report` in one line.
 
 Thoroughness is not the deliverable. A report that a busy reader abandons has failed, however
 correct it is. Optimise for the reader acting on it.
@@ -40,14 +45,16 @@ the shape it already has.
 
 Present this in the conversation, not as a file, in about 150 words:
 
-- **The question**, in one sentence, worded the way the reader would ask it.
-- **The answer**, in one or two. The actual claim, not "an assessment of X".
-- **The spine.** The three to six steps that carry a reader from the question to the answer, in
-  order.
+- **The situation**, in one sentence: what the reader faces and why it matters now.
+- **The conclusion**, in one or two. The actual claim, not "an assessment of X".
+- **The spine.** The three to six steps that carry a reader from the situation to the conclusion,
+  in order.
 - **What you are leaving out**, and where it went. Most framing disagreements are about something
   omitted that the user would have kept, and this line surfaces them for free.
 - **The stance**, where there is a genuine fork — leading with cost against leading with risk, a
   recommendation against a set of options.
+
+This block checks the argument; it is not an outline, and none of its labels become headings.
 
 Propose one framing. Name the alternative where a real fork exists, rather than offering a menu: a
 menu hands the judgement back to the user, which is what this step exists to spare them. Use
