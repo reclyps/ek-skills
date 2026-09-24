@@ -7,8 +7,7 @@ description: Review existing code against the CUPID design properties (Composabl
 
 Review a target against the CUPID properties and report on it. This skill is the review procedure only — the properties themselves live in the **`cupid-principles`** skill.
 
-**First step:** call the Skill tool with `cupid-principles` to load the properties, then read its `CUPID-PRINCIPLES.md` for the per-property "what to look for" and anti-patterns. That file is the rubric for everything below, and lives at
-`~/.claude/skills/cupid-principles/CUPID-PRINCIPLES.md` — pass that path to any subagent you delegate part of
+**First step:** load the `cupid-principles` skill, then read its `CUPID-PRINCIPLES.md` for the per-property "what to look for" and anti-patterns. That file is the rubric for everything below, and sits next to that skill's `SKILL.md` in whichever skills directory the harness loads from — resolve its absolute path and pass it to any subagent you delegate part of
 the review to.
 
 ## Defaults (all overridable via prompt)
@@ -31,12 +30,12 @@ For PR/branch targets, the review is about the *changeset*, not the full state o
 
 ## Investigation workflow
 
-Scale the investigation to the target. A full Explore sweep on a 3-file PR tends to surface concerns that are out of scope for the changeset.
+Scale the investigation to the target. A full parallel sweep on a 3-file PR tends to surface concerns that are out of scope for the changeset.
 
-If you are already running inside a subagent (e.g. a caller delegated this evaluation to an isolated context), skip the internal Explore fan-out and read the target directly — you already have a clean, scoped context, and nesting further agents adds cost without benefit.
+If you are already running inside a subagent (e.g. a caller delegated this evaluation to an isolated context), skip the internal fan-out and read the target directly — you already have a clean, scoped context, and nesting further agents adds cost without benefit.
 
-- **Small PR / file-level review:** read the diff and its immediate surroundings directly. Skip the parallel Explore agents unless the changeset genuinely reaches across many files.
-- **Larger PR, directory, or whole codebase:** launch the two parallel Explore agents below.
+- **Small PR / file-level review:** read the diff and its immediate surroundings directly. Skip the parallel context agents unless the changeset genuinely reaches across many files.
+- **Larger PR, directory, or whole codebase:** launch the two parallel read-only agents below. Where the harness has no subagents, run the two briefs yourself, one after the other.
 - **Very large target where analytical depth is the bottleneck (opt-in):** after the two context agents return, optionally fan out one evaluator agent per CUPID principle (5 total) — each receives the gathered context plus the principle's section from the `cupid-principles` skill's `CUPID-PRINCIPLES.md` and produces a finished section in the [Evaluation structure](#evaluation-structure) format. The main thread then stitches the five sections together and writes the summary table + highest-impact improvements. Use this mode only when the user asks for it or when synthesis in a single thread would clearly be the bottleneck — it trades redundant reads and possible cross-section style drift for genuinely parallel analysis.
 
 **Agent 1 — Target code:**

@@ -19,7 +19,7 @@ Before parallelizing any other work, make one minimal Figma MCP call (e.g. `get_
 
 ### 2. Discover the project's conventions
 
-Locate and read the project's agent-instruction files: `CLAUDE.md`, `AGENTS.md`, `AGENTS_README.md`, or `README.md`, at the repo root and in obvious subdirectories. Follow their pointers to convention documents (frontend/styling, architecture, logging, testing) and any module-specific docs whose topic matches the feature.
+Locate and read the project's agent-instruction files: `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS_README.md`, or `README.md`, at the repo root and in obvious subdirectories. Follow their pointers to convention documents (frontend/styling, architecture, logging, testing) and any module-specific docs whose topic matches the feature.
 
 If the project documents reusable UI primitives or design tokens, plan to reuse them rather than propose new ones. If no agent docs exist, note the gap in the plan's Open questions section and lean more heavily on clarifying questions in step 4.
 
@@ -31,17 +31,17 @@ A design almost always has **many sibling top-level frames** — one per screen,
 
 Call `get_metadata` on the **page / canvas node** from the user's URL — metadata is structure-only (ids, names, types, geometry) and far lighter than design context. Extract **every direct-child frame** into a catalog table: `node id | frame name`.
 
-**If the response is too large to hold in context, it gets saved to disk. Read that file back and `grep`/script out the depth-1 frame nodes — never proceed on the unparsed blob.** A large response means many frames, the exact case where missing one matters most.
+**If the response is too large to hold in context, get it onto disk (some harnesses do this automatically; otherwise save it yourself), then `grep`/script out the depth-1 frame nodes — never proceed on the unparsed blob.** A large response means many frames, the exact case where missing one matters most.
 
 This catalog is the master checklist for the rest of the skill. Nothing gets dropped silently.
 
 #### 3b. Explore every frame and the codebase in parallel
 
-**Figma side:** fan out **one `Explore` subagent per top-level frame** (batch small/related frames together if there are many). Each subagent fetches that frame's design context and screenshot, reads any embedded notes or annotation frames (they often hold hard requirements not visible in the render), and returns a **compact structured summary**: purpose, key components, states/variants, annotations, and which shared primitives it implies. The orchestrator collects summaries — not raw payloads — keeping its context lean and scaling to large designs.
+**Figma side:** fan out **one read-only subagent per top-level frame** (batch small/related frames together if there are many). Each subagent fetches that frame's design context and screenshot, reads any embedded notes or annotation frames (they often hold hard requirements not visible in the render), and returns a **compact structured summary**: purpose, key components, states/variants, annotations, and which shared primitives it implies. The orchestrator collects summaries — not raw payloads — keeping its context lean and scaling to large designs. Where the harness has no subagents, work through the catalog one frame at a time and write each summary down before fetching the next, so raw payloads never pile up.
 
 **Codebase side (in parallel):** identify where the feature should live and inventory the shared primitives that match the design's components (cards, buttons, forms, theme/colors, hooks, API caller patterns, repo patterns, route handlers, DB schema conventions).
 
-Use the `Explore` subagent for open-ended searches; use direct Read for known paths. Run independent searches in parallel.
+Delegate open-ended searches to a search subagent where the harness has one; read known paths directly. Run independent searches in parallel where the harness allows.
 
 #### Coverage rule (do not skip)
 
@@ -49,7 +49,7 @@ Before moving on, confirm **every catalog entry from 3a has a 3b summary**. If a
 
 ### 4. Ask focused clarifying questions before drafting
 
-Ask as many questions as the plan genuinely needs. Don't pad, don't truncate. `AskUserQuestion` supports 1–4 questions per call, so run multiple rounds if needed.
+Ask as many questions as the plan genuinely needs. Don't pad, don't truncate. Use the harness's structured-question tool if it has one, running multiple rounds if it caps questions per call; otherwise ask in chat.
 
 Common areas to surface:
 
