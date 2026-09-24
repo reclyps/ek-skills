@@ -50,9 +50,9 @@ The file exists now, so run the prose pass over it.
 
 1. `scripts/check-prose.sh <file>` — see [PROSE.md](PROSE.md) for what each flag indicates. Flags
    default to fix; keep one only deliberately, and say which and why.
-2. Hand the file to a subagent briefed with [REWRITE.md](REWRITE.md), pinned to Sonnet, telling it
-   the document is an Azure remediation action plan so it preserves the format. Then run the linter again on
-   the result.
+2. Hand the file to a subagent (or a separate session, where the harness has none) briefed with
+   [REWRITE.md](REWRITE.md), on a mid-tier model, telling it the document is an Azure remediation
+   action plan so it preserves the format. Then run the linter again on the result.
 
 The plan is mostly tables and lists. Weigh the cadence, triad and punchline flags against the
 summary and the open questions, and ignore them where they land on the resource tables or the

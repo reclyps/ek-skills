@@ -99,9 +99,9 @@ The file exists now, so run the prose pass over it.
 
 1. `scripts/check-prose.sh <file>` — see [PROSE.md](PROSE.md) for what each flag indicates. Flags
    default to fix; keep one only deliberately, and say which and why.
-2. Hand the file to a subagent briefed with [REWRITE.md](REWRITE.md), pinned to Sonnet, telling it
-   the document is an ADR so it preserves the format. Then run the linter again on
-   the result.
+2. Hand the file to a subagent (or a separate session, where the harness has none) briefed with
+   [REWRITE.md](REWRITE.md), on a mid-tier model, telling it the document is an ADR so it
+   preserves the format. Then run the linter again on the result.
 
 The ADR template's section headings are fixed by convention. The rewriter must not rename
 `Context`, `Decision`, `Alternatives Considered` or `Consequences`, and must not merge them. If the

@@ -1,7 +1,7 @@
 # Brief: QA subagent
 
-The last gate, after the rewrite and the linter. Sonnet; Opus when the deliverable is legal,
-compliance, or financial.
+The last gate, after the rewrite and the linter. Mid-tier model; top tier when the deliverable is
+legal, compliance, or financial.
 
 **Pass it:** every document going to the reader — the memo and the reference document both, where
 the output was tiered — and paths to the source evidence: research notes, data files, transcripts,

@@ -1,6 +1,6 @@
 ---
 name: prose-pass
-description: Strip model-written tics from a finished document — a linter pass over the mechanical and structural tells, then a rewrite by a subagent that has not seen the research. Use when the user asks to run the prose pass, check the prose, tighten or de-model a written file, or when another skill hands over a draft for cleaning. Operates on a file that already exists; it does not write, research, or fact-check the document.
+description: Strip model-written tics from a finished document — a linter pass over the mechanical and structural tells, then a rewrite in a fresh context that has not seen the research. Use when the user asks to run the prose pass, check the prose, tighten or de-model a written file, or when another skill hands over a draft for cleaning. Operates on a file that already exists; it does not write, research, or fact-check the document.
 ---
 
 # Prose pass
@@ -38,7 +38,9 @@ Length is reported, never scored. Pass `--max-words` only when the caller has a 
 A model editing its own draft defends its own phrasing: it reads its tics as intent, and the
 structural ones are invisible from the inside. Hand the file to a subagent briefed with
 [REWRITE.md](REWRITE.md), which carries the hard limits — never strengthen a claim, never add a
-fact, never touch a number or a qualifier, no restructuring. Pin it to Sonnet.
+fact, never touch a number or a qualifier, no restructuring. A mid-tier model is enough; this is
+bounded editing, and the top tier adds cost, not quality. Where the harness has no subagents, run
+it as a separate session or model call that sees only the brief and the file.
 
 Then run the linter again on the result, and read the result yourself. A rewriter working without
 context will occasionally flatten a qualifier that mattered.

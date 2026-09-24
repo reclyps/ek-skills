@@ -1,6 +1,6 @@
 # Brief: prose rewrite subagent
 
-Launch after the draft is complete, before the linter. Sonnet. Works on any document a person
+Launch after the draft is complete, before the linter. Mid-tier model. Works on any document a person
 reads — a report, a ticket description, an ADR, an email.
 
 **Pass it:** the draft file path, and the path to PROSE.md.

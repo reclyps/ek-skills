@@ -108,7 +108,8 @@ Three, in this order. None is optional, and the order matters where noted.
 
 A model editing its own draft defends its own phrasing: it reads its tics as intent, and the
 structural ones are invisible from the inside. Hand the draft to a subagent that has not seen the
-research, briefed with [REWRITE.md](REWRITE.md). Pin it to Sonnet.
+research, briefed with [REWRITE.md](REWRITE.md), on a mid-tier model. Where the harness has no
+subagents, run it as a separate session or model call that sees only the brief and the draft.
 
 ### 2. The linter
 
@@ -135,8 +136,9 @@ with the reason. Deciding silently that a flag was intentional is how the tics s
 The last gate. A subagent briefed with [VERIFY.md](VERIFY.md) recomputes every number in Python,
 tests every assertive sentence against the material below it, and reconciles the memo against the
 reference document. Pass it both; a figure or a conclusion that differs between them is the failure
-a reader notices first. Pin it to Sonnet; Opus when the deliverable is legal, compliance, or
-financial.
+a reader notices first. A mid-tier model; the top tier when the deliverable is legal, compliance,
+or financial. Where the harness has no subagents, use a separate session given only what VERIFY.md
+says to pass.
 
 **This runs after the rewrite, not before.** The rewriter's job is sharpening sentences, and a
 sharper sentence usually makes a stronger claim, which is the failure this pass exists to catch.
