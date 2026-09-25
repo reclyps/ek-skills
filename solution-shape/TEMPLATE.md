@@ -5,7 +5,7 @@ Keep the whole document under about 60 lines. Use the vocabulary from step 1 thr
 ````md
 # <Feature> — solution shape
 
-<Two or three lines: the problem, and what this shape commits to.>
+<The pitch: one or two plain sentences on what changes and why.>
 
 ## Vocabulary
 
