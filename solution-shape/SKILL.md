@@ -5,7 +5,7 @@ description: Agree the shape of a change with the user before acting — from a 
 
 # Solution Shape
 
-Agree the napkin sketch of a change with the user before anyone writes a plan or code. This skill produces the shape and stops; planning, tickets, and code are other skills' jobs.
+Agree the napkin sketch of a change with the user before anyone writes a plan or code. This skill produces the shape and stops; the shape doc is the shape-doc skill's job, and planning, tickets, and code belong to other skills.
 
 ## Napkin resolution
 
@@ -41,6 +41,7 @@ Both branches check these against the proposed shape and raise any that apply as
 
 - **Ownership:** which module owns each cross-cutting concern (retries, config, logging, source of truth for shared data)
 - **Config surface:** each new env var or flag, and why it can't be hardcoded or feature-flagged instead
+- **Main flow:** the trigger, the steps through the components, and where each step can fail
 - **Boundary failures:** what happens on bad input or a missing dependency at each seam
 - **Not building:** what is deliberately deferred
 
@@ -70,7 +71,7 @@ When only one path exists, the approach is the pitch plus where. If the user ans
 
 ### 3. Hand off
 
-Restate the agreed pitch, then offer to make the change, or to write it up as a doc if the discussion grew. Then stop.
+Restate the agreed pitch, then offer to make the change, or to write it up with shape-doc if the discussion grew. Then stop.
 
 ## Large branch
 
@@ -94,11 +95,11 @@ Anything more detailed than the shape goes into open questions, with an owner.
 
 **Done when** every shape-level decision is settled by the user or listed as an open question with an owner.
 
-### 4. Write the shape doc
+### 4. Hand over to shape-doc
 
-Give the pitch and a summary of the agreed shape in five lines or fewer, and ask whether it captures what you agreed. In the same message, suggest a path for the doc: follow wherever the project or user keeps working notes, or fall back to `<slug>-shape.md` at the project root. On a yes to both, write the doc to the confirmed path using [TEMPLATE.md](TEMPLATE.md).
+Restate the agreed shape in the parts shape-doc takes as input: the pitch, components with their responsibilities, dependencies and seams, the main flow with its failure points, rejected alternatives, what isn't being built, and open questions with owners. State the shape as it stands, with no record of who decided what or of options later dropped. Ask whether it captures what you agreed, and in the same message suggest a path for the doc the way shape-doc describes. On a yes to both, run shape-doc with the restated shape and the path.
 
-**Done when** the file exists and every section of the template is filled in or deliberately left out.
+**Done when** shape-doc has written the file.
 
 ### 5. Hand off
 
@@ -106,8 +107,8 @@ Suggest in one line what could come next: an implementation plan built from the 
 
 ## Revising an existing shape
 
-If a shape doc already exists for this work, read it first and start from its open questions plus whatever prompted the revision. Update the pitch, components, responsibilities, and seams so they describe the shape as it stands now. Decisions are append-only: add the new decision with its date and mark the one it replaces as superseded, rather than rewriting it.
+If a shape doc already exists for this work, read it first and start from its open questions plus whatever prompted the revision. Settle what changes, then hand the whole revised shape to shape-doc, which rewrites the doc in place. An option the revision rules out goes with the rejected alternatives.
 
 ## For skills that come next
 
-Downstream work treats what was agreed — the approach in chat, or the shape doc's **Decisions** section — as a scope lock: it may add detail, but changing a decision means reopening it with the user, here.
+Downstream work treats what was agreed — the approach in chat, or the shape doc — as a scope lock: it may add detail, but contradicting the shape or reviving a rejected alternative means reopening it with the user, here.
