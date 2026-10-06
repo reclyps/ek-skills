@@ -17,7 +17,8 @@ The aggregate is what makes prose feel machine-written and tiring to read.
 
 **Em-dash density.** The single strongest tell. Reach for a comma, a colon, or a full stop first.
 Above roughly one per 200 words, the prose starts to feel breathless. A document with 114 of them
-was described by its reader as painful.
+was described by its reader as painful. A spaced hyphen after a bold list label (`**Label** - text`)
+is the house separator; leave it.
 
 **Consecutive bolded paragraph openers.** Starting every paragraph with a bolded thesis makes the
 reader feel shouted at, and it flattens emphasis so nothing stands out. Use headings for structure
@@ -87,10 +88,15 @@ into when it thinks it is being serious: **delve**, **underscore**, **pivotal**,
 The tells you cannot reach with a word list. These are what make a document read as model-written
 even after every banned phrase is gone.
 
-**Antithesis.** "It isn't a config problem; it's a design problem." "Not a bug, but a choice."
-"A recommendation, not a decision." The correction cadence: set up a wrong reading, knock it down,
-land on the right one. Once in a document is rhetoric. Four times is a tic. State the thing
-positively and delete the strawman.
+**Antithesis.** "It isn't a config problem; it's a design problem." "Not a bug, but a choice." "A
+recommendation, not a decision." The correction cadence: set up a wrong reading, knock it down, land
+on the right one. It also hides in "X, not Y" mid-sentence, "This isn't X. It's Y." across two
+sentences, "not because X but because Y", and "X — not Y". Fix every instance. Where the negated
+half is a strawman, delete it. Where it carries information, such as scope or a rejected option,
+keep the information and change the construction: "unlike" to compare properties ("a route handler,
+which, unlike a page, inherits none of the root layout"), "rather than" to choose between options,
+or its own sentence. A concession ("I'm not against it, but…") is a different construction; keep it
+and say so. Vary the fix, or "unlike" becomes the next tic.
 
 **Adverb-comma openers.** "Notably,", "Critically,", "Importantly,", "Crucially,", "Ultimately,",
 "In practice,", "Put simply,". They tell the reader how to feel about a sentence instead of writing
@@ -142,11 +148,11 @@ differently if the counter-argument held.
 
 **Framing inherited from the prompt.** If the investigation began from a suspicion, phrases like
 "the problem we expected to find" and "the central hypothesis" will leak into the deliverable. The
-reader did not share the suspicion and should not have to unpick it. Report what is, not what was
-feared.
+reader did not share the suspicion and should not have to unpick it. Report what the evidence
+shows.
 
-**Dead-end framing.** "This cannot be determined" ends the reader's options. "Ask X, who owns it"
-gives them one. Almost every unknown has a person attached; find them.
+**Dead-end framing.** "This cannot be determined" ends the reader's options. "Ask the account
+owner, X" gives them one. Almost every unknown has a person attached; find them.
 
 ## Aim at
 
@@ -157,12 +163,39 @@ the prose should look like:
   four systems" invites a check. "Retention is a real concern" does not.
 - **Verbs are literal.** Something was deployed, deleted, asked, refused, measured. It was not
   surfaced, landed, or unlocked.
-- **Named actors and dates.** "Priya Raman expects to reply this week" beats "clarification is
-  pending".
+- **Named actors and dates.** "The account owner, Priya Raman, expects to reply this week" beats
+  "clarification is pending".
 - **Length varies because the content varies.** A finding needs a clause; a caveat needs a
   paragraph. Do not even them out.
 - **Nothing announces its own importance.** No "critically", no "the key point is". Put the
   important thing first and let position do the work.
+
+## Voice
+
+Write in the author's voice. Formatting belongs to the document type and the caller's template; this
+covers the sentences.
+
+- **People** - role, then name, on first mention: "the account owner, Shawn Emerson". The name alone
+  after that.
+- **Contrast** - "unlike" to compare properties, "rather than" to choose between options.
+- **Confidence** - one hedge word at most ("likely"), then the reason.
+- **Reasons** - in the same sentence as the claim.
+- **Subject** - "we" for decisions and the team's actions; the component when describing a step in a
+  flow.
+- **Register** - formal. Contractions only in documents for the team, such as a shape doc, a ticket,
+  or an ADR. Spell them out for management or an external reader, and when the type is unclear.
+- **Transitions** - fold "so" and "also" into the sentence rather than opening with them. Opening
+  with "Though" is fine.
+- **Asides** - at most one parenthetical per sentence.
+
+A passage in the author's own words. It shows the reasoning and the rhythm, a long sentence carrying
+its reason and then a short conclusion. Where its register is more casual than the rules above, the
+rules win.
+
+> I am also a little confused by the summary's takeaway that "we are mostly in the clear", when it
+> follows by showing that for a large majority of our ArcGIS host layers, we are not in compliance,
+> since we are serving them from a 2-seat subscription that does not allow commercial
+> redistribution. When I read that, my takeaway is that we are mostly NOT in the clear.
 
 ## Calibration
 

@@ -30,7 +30,8 @@ flag() { flags=$((flags+1)); echo "FLAG  $*"; }
 # Prose-only view: drop fenced code, tables, headings, link targets. Pattern checks run
 # against this so a code sample or a URL cannot trip a phrase rule.
 prose=$(mktemp)
-trap 'rm -f "$prose"' EXIT
+paras=$(mktemp)
+trap 'rm -f "$prose" "$paras"' EXIT
 awk '
     /^[[:space:]]*```/ { fence = !fence; next }
     fence { next }
@@ -38,6 +39,8 @@ awk '
     /^[[:space:]]*#/  { next }
     { gsub(/\]\([^)]*\)/, "]"); print }
 ' "$f" > "$prose"
+# One line per paragraph, for patterns that span a wrapped line or a sentence break.
+awk '/^[[:space:]]*$/ { if (p != "") print p; p = ""; next } { p = p " " $0 } END { if (p != "") print p }' "$prose" > "$paras"
 
 words=$(wc -w < "$f" | tr -d ' ')
 pwords=$(wc -w < "$prose" | tr -d ' ')
@@ -145,10 +148,25 @@ show() {
     fi
 }
 
-# "It isn't X; it's Y" / "Not X, but Y" / "X, not Y" — the correction cadence.
-show "antithesis (isn't X, it's Y)" "\b(is|are|was|were)n'?t? ?(not)? [^.,;:]{2,45}[,;] (it'?s|they'?re|it is|but|rather)"
-show "not X, but Y"                 "\bnot [^.,;:]{2,45}, but\b"
-show ", not Y (corrective tail)"    "[a-z]{3,}, not [a-z][^.]{2,40}\." 2
+# Antithesis, the correction cadence. Zero tolerance: every form counts toward one flag.
+# Runs on whole paragraphs so a pair split across wrapped lines or two sentences matches.
+# "rather than", "instead of", and "unlike" are the sanctioned rewordings; never add them.
+anti_pats=(
+    "(\b(is|are|was|were)n't|\b(is|are|was|were) not|'s not|'re not) [^.;:!?]{2,30}[,;:.—] *(it|they|this|that|we)('s|'re| is| are| was| were)\b"
+    "\bnot (just |only |merely |because )?[^.,;:!?]{2,45},? but( also| rather| because)?\b"
+    "[a-z0-9]{2,}, not [a-z0-9]"
+    "— not [a-z0-9]"
+    "\bnot [^.,;:!?—]{2,40} — [a-z]"
+)
+anti=0; anti_hits=""
+for p in "${anti_pats[@]}"; do
+    anti=$(( anti + $(grep -oiE -- "$p" "$paras" | wc -l | tr -d ' ') ))
+    anti_hits="$anti_hits$(grep -oiE -- "$p[^.;]{0,25}" "$paras")"$'\n'
+done
+if [ "$anti" -gt 0 ]; then
+    flag "antithesis x$anti: reword so the contrast carries no correction; keep any scope it carries"
+    printf '%s' "$anti_hits" | grep -v '^$' | sort -u | head -5 | sed 's/^/        /'
+fi
 
 # Adverb-comma openers.
 show "adverb opener" "(^|\. )(Notably|Critically|Importantly|Crucially|Ultimately|Fundamentally|Realistically|Practically|In practice|In short|Put simply|Simply put|In other words|At bottom),"

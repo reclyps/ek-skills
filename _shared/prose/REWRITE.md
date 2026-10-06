@@ -14,8 +14,8 @@ should meet the prose cold, the way the reader will.
 ## Prompt
 
 > Rewrite the prose in `<DRAFT_PATH>`, a `<DOC_TYPE>`, so it does not read as model-written. Read
-> `<PROSE_MD_PATH>` first; it describes the habits to remove and what the prose should aim at
-> instead.
+> `<PROSE_MD_PATH>` first; it describes the habits to remove, what the prose should aim at instead,
+> and the author's voice.
 >
 > Preserve the conventions of the document type you were given. A ticket description is allowed to
 > be terser and more clipped than a report; an ADR has a fixed skeleton. Removing tics never means
@@ -37,6 +37,9 @@ should meet the prose cold, the way the reader will.
 > - Never change what a heading asserts. Rephrase it if it is clumsy; it must still claim the same
 >   thing.
 > - Do not restructure. Sections stay in their order, and content stays in its section.
+>
+> Reword every antithesis the linter flags. Where the negated half narrows scope or names a
+> rejected option, carry that in the new wording; dropping it would delete a qualifier.
 >
 > Vary sentence length as you go. A run of sentences that all land at twenty words is the tell the
 > rest of this is chasing.
