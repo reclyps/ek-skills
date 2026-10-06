@@ -1,6 +1,6 @@
 # Shape doc template
 
-Keep the prose under about 60 lines; diagrams don't count. If it runs over, trim Alternatives considered and Not building first. Use the shape's own vocabulary, and define each domain term where it first appears. List items are sentences with a bold subject, not `term — definition` pairs.
+Keep the prose under about 60 lines; diagrams don't count. If it runs over, trim Alternatives considered and Not building first. Use the shape's own vocabulary, and define each domain term where it first appears. List items open with a bold label and a spaced hyphen: `**Label** - text`.
 
 ````md
 # <Feature> solution shape
@@ -37,7 +37,7 @@ Thick border: new or changed. Dashed: exists today. Labeled arrows are the seams
 
 **<module>** (<new | changed | existing>) <one sentence on what the module is responsible for>.
 
-- **<component>** <does what it owns, plus anything the diagram can't show: purity, who logs, lifetime, source of truth>.
+- **<component>** - <does what it owns, plus anything the diagram can't show: purity, who logs, lifetime, source of truth>.
 
 ## Sequence
 
@@ -57,11 +57,11 @@ sequenceDiagram
 
 ## Alternatives considered
 
-- **<Option>.** <Why it was ruled out.>
+- **<Option>** - <why it was ruled out.>
 
 ## Not building
 
-- **<Item>.** <What would make it worth building.>
+- **<Item>** - <what would make it worth building.>
 
 ## Open questions
 
