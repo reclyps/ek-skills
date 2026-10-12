@@ -1,6 +1,7 @@
 ---
 name: azure-notification-triage
 description: Triage an Azure notification email (Action required / Action recommended / End of support / retirement) — parse it, identify which of the user's Azure resources are actually affected with evidence, and write an action plan. Use when the user shares or points to an Azure notification/service-health email about a deprecation, retirement, end-of-support, migration, or behavioral change, and wants to know what to do about it. Investigates and plans only; does not execute changes.
+effort: high
 ---
 
 # Azure Notification Triage
