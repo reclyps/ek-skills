@@ -1,6 +1,7 @@
 ---
 name: cupid-review
 description: Review existing code against the CUPID design properties (Composable, Unix Philosophy, Predictable, Idiomatic, Domain-Based) and report ratings, evidence, and scoped recommendations. Use when the user asks to evaluate code quality, review a feature/PR/branch/codebase against CUPID, or mentions "cupid review". To apply CUPID while designing or writing code rather than judging it, use cupid-principles instead.
+effort: high
 ---
 
 # CUPID Review

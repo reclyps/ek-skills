@@ -1,6 +1,7 @@
 ---
 name: solution-shape
 description: Agree the shape of a change with the user before acting — from a bugfix's approach to a feature's modules, seams, and key decisions — so the user makes the decisions and can explain the work. Use when the user invokes /solution-shape or asks to sketch a solution, shape it, or agree an approach first. When the user is heading toward an implementation plan for non-trivial work and no shape has been agreed, offer it in one line, along the lines of "sounds like we're heading toward a plan — run /solution-shape to decide the shape together first?", and start only on a yes.
+effort: high
 ---
 
 # Solution Shape

@@ -1,6 +1,7 @@
 ---
 name: plan-from-figma
 description: Produce a structured implementation plan markdown file from a Figma design link, after verifying the Figma MCP works, discovering the project's conventions, inventorying available primitives, and asking focused clarifying questions before drafting. Use when the user provides a Figma URL and wants a plan rather than code — phrases like "plan this Figma", "write an implementation plan from this design", "how would we build this", "spec out this design". Do not use for direct Figma-to-code (use figma-implement-design) or for writing a PRD (use write-a-prd).
+effort: high
 ---
 
 # Plan from Figma
