@@ -29,7 +29,7 @@ Keep rejected alternatives a reader might plausibly propose again, with their re
 
 Stay at napkin resolution: components, responsibilities, seams. File paths, signatures, SQL, and edge-case handling belong to the plan; put any that matters to the shape under open questions.
 
-**Where facts go.** Config, ownership, and non-structural decisions (what a user sees, a default) go in the bullet of the component they belong to. Failures and degraded results go in the sequence step where they happen.
+**Where facts go.** Domain terms go under Terms, not defined inline. The main path goes in the Overview paragraph, without failures. Config, ownership, and non-structural decisions (what a user sees, a default) go in the bullet of the component they belong to. Failures and degraded results go in the Sequence failure list, under the phase where they happen.
 
 ## Diagrams
 

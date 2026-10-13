@@ -1,16 +1,23 @@
 # Shape doc template
 
-Keep the prose under about 60 lines; diagrams don't count. If it runs over, trim Alternatives considered and Not building first. Use the shape's own vocabulary, and define each domain term where it first appears. List items open with a bold label and a spaced hyphen: `**Label** - text`.
+The doc has two layers. The first screen (pitch, Terms, Overview) gives a reader the whole solution in about a minute; the sections after it are reference. Sections a reader reads through (Overview, module sentences) are prose; sections a reader looks things up in (Terms, Components, failures, Alternatives, Not building, Open questions) are lists.
+
+Keep the prose under about 60 lines; diagrams don't count. If it runs over, trim Alternatives considered and Not building first. Use the shape's own vocabulary throughout. List items open with a bold label and a spaced hyphen: `**Label** - text`.
 
 ````md
 # <Feature> solution shape
 
 <The pitch: one or two plain sentences on what changes and why.>
 
-<!-- Only when the pitch uses terms it can't define in place: at most three, as prose. -->
-Terms: a **<term>** is <meaning>.
+## Terms
 
-## Components
+<!-- Domain ideas a teammate new to this area wouldn't know; components get their own section. Leave out if there are none. -->
+
+- **<term>** - <meaning in this domain>.
+
+## Overview
+
+<The main path in three to five sentences: what triggers it, which component does what, and what passes between them, using the terms above. No failures; those go under Sequence.>
 
 ```mermaid
 flowchart LR
@@ -35,9 +42,11 @@ flowchart LR
 
 Thick border: new or changed. Dashed: exists today. Labeled arrows are the seams.
 
+## Components
+
 **<module>** (<new | changed | existing>) <one sentence on what the module is responsible for>.
 
-- **<component>** - <does what it owns, plus anything the diagram can't show: purity, who logs, lifetime, source of truth>.
+- **<component>** - <what it owns, plus anything the diagram can't show: purity, who logs, lifetime, source of truth>.
 
 ## Sequence
 
@@ -53,7 +62,9 @@ sequenceDiagram
   B-->>A: <result>
 ```
 
-1. **<Phase>.** <What happens, which component does it, and what happens on failure at this step.>
+When things go wrong:
+
+- **<Phase>** - <each failure or degraded result at this step, and what happens to the work in flight>.
 
 ## Alternatives considered
 
