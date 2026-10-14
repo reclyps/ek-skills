@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Export each Mermaid block in a shape doc to a .mmd source and a .svg, named after the
-# `## ` heading above it (components, sequence).
+# Export each Mermaid block in a shape doc to a .mmd source and a .svg, named for its
+# diagram type: components (flowchart), sequence, or the type keyword for anything else.
 #
 # Labels render as plain SVG text, not HTML: Confluence drops <foreignObject>, which
 # leaves HTML labels blank.
@@ -25,22 +25,30 @@ outdir="${2:-${doc%.md}-diagrams}"
 mkdir -p "$outdir"
 
 awk -v outdir="$outdir" '
-    /^## / {
-        slug = tolower(substr($0, 4))
-        gsub(/[^a-z0-9]+/, "-", slug)
-        gsub(/^-|-$/, "", slug)
+    /^[[:space:]]*```mermaid/ { inblock = 1; body = ""; type = ""; next }
+    inblock && /^[[:space:]]*```/ { write_block(); inblock = 0; next }
+    inblock {
+        if (type == "" && NF && $1 !~ /^%%/) type = $1
+        body = body $0 "\n"
     }
-    /^[[:space:]]*```mermaid/ {
-        name = (slug == "" ? "diagram" : slug)
+
+    function write_block(    name, file) {
+        name = diagram_name(type)
         seen[name]++
         if (seen[name] > 1) name = name "-" seen[name]
         file = outdir "/" name ".mmd"
-        printf "" > file
-        inblock = 1
-        next
+        printf "%s", body > file
+        close(file)
+        print file
     }
-    inblock && /^[[:space:]]*```/ { close(file); print file; inblock = 0; next }
-    inblock { print > file }
+
+    function diagram_name(t) {
+        if (t == "flowchart" || t == "graph") return "components"
+        if (t == "sequenceDiagram") return "sequence"
+        t = tolower(t)
+        gsub(/[^a-z0-9]+/, "-", t)
+        return t == "" ? "diagram" : t
+    }
 ' "$doc" | while read -r mmd; do
     svg="${mmd%.mmd}.svg"
     mmdc -q -i "$mmd" -o "$svg" -c "$config" -b white
