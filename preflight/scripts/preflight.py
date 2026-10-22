@@ -3,7 +3,11 @@
 
 This script handles the parts a pre-flight check can verify WITHOUT model
 judgement: whether planned bash commands would be allowed/denied/prompted by
-the settings files, and whether required CLIs exist and are authenticated.
+the settings files and Bash PreToolUse hooks in the given permission mode, and
+whether required CLIs exist and are authenticated.
+
+Bash PreToolUse hooks from the settings files are run with a synthetic payload,
+so they must be side-effect free. Plugin hooks are not checked.
 
 MCP connectivity is NOT checked here — only Claude can call MCP tools — so any
 servers passed via --mcp are echoed back as a reminder for Claude to probe.
@@ -13,12 +17,13 @@ or AMBER (would prompt). Fail-fast callers should halt on a non-zero exit.
 
 Usage:
   preflight.py --commands "git commit" "npm run build" --clis gh jq \
-               --mcp Figma Atlassian --cwd /path/to/project
+               --mcp Figma Atlassian --cwd /path/to/project --mode auto
 """
 
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -73,12 +78,66 @@ def load_permissions(files):
     return merged, default_mode
 
 
+def load_classify_all_shell() -> bool:
+    """autoMode.classifyAllShell, which Claude Code reads only from user settings
+    (or managed / --settings), never from project files."""
+    try:
+        data = json.loads((Path.home() / ".claude" / "settings.json").read_text())
+    except (json.JSONDecodeError, OSError):
+        return False
+    return bool(data.get("autoMode", {}).get("classifyAllShell"))
+
+
+def load_bash_hooks(files):
+    """Return (hook_command, source_file) for every PreToolUse hook whose
+    matcher covers the Bash tool."""
+    hooks = []
+    for f in files:
+        try:
+            data = json.loads(f.read_text())
+        except (json.JSONDecodeError, OSError):
+            continue
+        for entry in data.get("hooks", {}).get("PreToolUse", []):
+            matcher = entry.get("matcher", "")
+            if matcher not in ("", "*") and not re.fullmatch(matcher, "Bash"):
+                continue
+            for hook in entry.get("hooks", []):
+                if hook.get("type") == "command":
+                    hooks.append((hook["command"], f.name))
+    return hooks
+
+
+def hook_decision(command: str, hooks):
+    """Run each Bash hook on a synthetic payload. Returns (decision, reason)
+    for the first hook that denies or asks, else None."""
+    payload = json.dumps({"hook_event_name": "PreToolUse", "tool_name": "Bash",
+                          "tool_input": {"command": command}})
+    for hook_cmd, src in hooks:
+        try:
+            proc = subprocess.run(hook_cmd, shell=True, input=payload,
+                                  capture_output=True, text=True, timeout=15)
+        except subprocess.TimeoutExpired:
+            continue
+        if proc.returncode == 2:
+            return ("deny", f"hook `{hook_cmd}` ({src}) blocks it")
+        try:
+            out = json.loads(proc.stdout or "{}").get("hookSpecificOutput", {})
+        except json.JSONDecodeError:
+            continue
+        decision = out.get("permissionDecision")
+        if decision in ("deny", "ask"):
+            reason = out.get("permissionDecisionReason", "")
+            return (decision, f"hook `{hook_cmd}` ({src}): {reason}")
+    return None
+
+
 def parse_bash_rule(rule: str):
     """Extract the matchable spec from a permission rule.
 
     Returns (kind, spec) where kind is:
       'all'    -> bare `Bash`, matches any command
-      'prefix' -> `Bash(foo:*)`, command must start with `foo`
+      'prefix' -> `Bash(foo:*)` or `Bash(foo *)`, command must start with `foo`
+      'glob'   -> `Bash(az * delete*)`, each `*` stands for any text
       'exact'  -> `Bash(foo)`, command must equal `foo`
       None     -> not a Bash rule (e.g. Read/WebFetch), ignored here
     """
@@ -89,6 +148,10 @@ def parse_bash_rule(rule: str):
     inner = rule[len("Bash("):-1].strip()
     if inner.endswith(":*"):
         return ("prefix", inner[:-2].strip())
+    if inner.endswith(" *") and "*" not in inner[:-2]:
+        return ("prefix", inner[:-2].strip())
+    if "*" in inner:
+        return ("glob", inner)
     return ("exact", inner)
 
 
@@ -111,25 +174,41 @@ def cmd_matches(command: str, rule: str) -> bool:
             nxt = cmd[len(spec):len(spec) + 1]
             return nxt in (" ", ":")
         return False
+    if kind == "glob":
+        pattern = ".*".join(re.escape(part) for part in spec.split("*"))
+        return re.fullmatch(pattern, cmd, flags=re.S) is not None
     return False
 
 
-def classify_command(command: str, perms, default_mode: str):
-    """Return (status, reason). Deny wins, then allow, then ask, else unlisted."""
-    if default_mode == "bypassPermissions":
-        return (GREEN, "defaultMode=bypassPermissions (all commands allowed)")
+def classify_command(command: str, perms, mode: str, classify_all_shell: bool, hook):
+    """Return (status, reason) in Claude Code's order: deny rules, then hook and
+    ask rules (which prompt in every mode, auto included), then the mode decides."""
     for rule, src in perms["deny"]:
         if cmd_matches(command, rule):
             return (RED, f"matched DENY `{rule}` ({src})")
-    for rule, src in perms["allow"]:
-        if cmd_matches(command, rule):
-            return (GREEN, f"matched ALLOW `{rule}` ({src})")
+    if hook and hook[0] == "deny":
+        return (RED, hook[1])
+    if hook:
+        return (AMBER, f"{hook[1]} — will prompt; a background agent gets a denial")
     for rule, src in perms["ask"]:
         if cmd_matches(command, rule):
-            return (AMBER, f"matched ASK `{rule}` ({src}) — will prompt")
-    if default_mode == "acceptEdits":
+            return (AMBER, f"matched ASK `{rule}` ({src}) — will prompt, even in auto mode")
+    if mode == "bypassPermissions":
+        return (GREEN, "mode=bypassPermissions")
+    allow = next(((r, s) for r, s in perms["allow"] if cmd_matches(command, r)), None)
+    if mode == "auto":
+        if classify_all_shell:
+            return (GREEN, "auto mode: classifier reviews it, no prompt (allow rules suspended by classifyAllShell)")
+        if allow:
+            return (GREEN, f"matched ALLOW `{allow[0]}` ({allow[1]}), skips the classifier")
+        return (GREEN, "auto mode: classifier reviews it, no prompt")
+    if allow:
+        return (GREEN, f"matched ALLOW `{allow[0]}` ({allow[1]})")
+    if mode == "dontAsk":
+        return (RED, "no matching allow rule — dontAsk mode auto-denies it")
+    if mode == "acceptEdits":
         # acceptEdits auto-accepts edits but still prompts for other tools incl. Bash
-        return (AMBER, "no matching rule (defaultMode=acceptEdits still prompts for Bash)")
+        return (AMBER, "no matching rule (acceptEdits still prompts for Bash)")
     return (AMBER, "no matching allow rule — will prompt")
 
 
@@ -176,16 +255,25 @@ def main():
     ap.add_argument("--mcp", nargs="*", default=[],
                     help="MCP servers the task plans to use (echoed for Claude to probe)")
     ap.add_argument("--cwd", default=os.getcwd(), help="project root for settings discovery")
+    ap.add_argument("--mode", choices=["default", "manual", "acceptEdits", "plan", "auto",
+                                       "dontAsk", "bypassPermissions"],
+                    help="the session's current permission mode; defaults to settings defaultMode")
     args = ap.parse_args()
 
     cwd = Path(args.cwd).resolve()
     files = discover_settings(cwd)
     perms, default_mode = load_permissions(files)
+    mode = args.mode or default_mode
+    if mode == "manual":
+        mode = "default"
+    classify_all_shell = load_classify_all_shell()
+    hooks = load_bash_hooks(files)
 
     rows = []  # (category, target, status, reason)
 
     for cmd in args.commands:
-        status, reason = classify_command(cmd, perms, default_mode)
+        hook = hook_decision(cmd, hooks)
+        status, reason = classify_command(cmd, perms, mode, classify_all_shell, hook)
         rows.append(("perm", cmd, status, reason))
 
     clis = list(dict.fromkeys(args.clis or extract_clis_from_commands(args.commands)))
@@ -197,7 +285,10 @@ def main():
     print("PRE-FLIGHT CHECK")
     print(f"  cwd: {cwd}")
     print(f"  settings: {', '.join(str(f) for f in files) or '(none found)'}")
-    print(f"  defaultMode: {default_mode}")
+    mode_source = "--mode" if args.mode else "settings defaultMode; pass --mode for the live session"
+    print(f"  mode: {mode} ({mode_source})")
+    print(f"  autoMode.classifyAllShell: {classify_all_shell}")
+    print(f"  Bash hooks: {', '.join(c for c, _ in hooks) or '(none)'}")
     print()
     if rows:
         width = max(len(t) for _, t, _, _ in rows)
