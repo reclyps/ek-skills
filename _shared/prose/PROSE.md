@@ -127,8 +127,12 @@ carry the point.
 **Positional references.** "the middle column", "the first table", "the section above". Name the
 thing. Readers count differently, and structure changes.
 
-**Internal paths.** Any `local/`, `audit-notes/`, or bare `.md` link breaks the moment the document
-leaves the repository. Ignore the flag if the destination is a repo file.
+**File paths.** Any file path, tracked or not, breaks the moment the document leaves the
+repository. Link to the hosted file or describe it. Ignore the flag if the destination is a repo file.
+
+**Pending links.** For a companion document posted to the same place, write
+`[title](LINK-TBD:file.md)` and replace it with the real URL after upload. Each one stays flagged
+until replaced.
 
 ## What the linter cannot catch
 

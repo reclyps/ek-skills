@@ -16,7 +16,7 @@ Check whether each file a change touches lets a reader find its entry point and 
 
 ## Workflow
 
-1. **List files.** `git diff --name-status <base>...<head>`, filtered to scope. Write the list to a scratch or `local/` file if long.
+1. **List files.** `git diff --name-status <base>...<head>`, filtered to scope. Write the list to a scratch file or the working-files location in the user's agent instructions if long.
 2. **Find each file's entry point(s):** the export, `main`, component, handler, or public type a caller reaches first. A file of peer utilities with no entry point is fine; say so and move on.
 3. **Apply the test** from the rules: read only the entry point. Can you say what it does, in order, without opening a helper? Note what precedes it and how far down it sits.
 4. **Check local idiom before flagging layout.** Look at lint config (define-before-use rules) and neighboring files. If the layout is forced or matches the codebase, the fix is where code lives, not reordering. Record the evidence.
@@ -46,6 +46,6 @@ Then:
 - **Left alone (local idiom):** each pattern and the evidence.
 - **Summary:** files checked, findings, and the one or two worth fixing first.
 
-Direct invocation renders in the terminal. When delegating, use a mid-tier model at default effort; the top tier for large or cross-module changes. The smallest tier misses abstraction-level calls. A delegated run writes the report under `local/` and returns a summary under ~300 words plus the path.
+Direct invocation renders in the terminal. When delegating, use a mid-tier model at default effort; the top tier for large or cross-module changes. The smallest tier misses abstraction-level calls. A delegated run writes the report to the output path the brief names, else to the working-files location in the user's agent instructions, and returns a summary under ~300 words plus the path. With neither, it returns the full report.
 
 Do not edit, and do not post to the PR. Offer to apply the fixes or draft PR comments; the caller decides.

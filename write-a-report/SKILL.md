@@ -21,7 +21,8 @@ references. If the user has not said, ask. Guessing produces a document that ser
 
 **Where does it get published?** Confluence, email, a repo file and a Slack message have different
 constraints. This decides whether internal file paths are usable, whether links are needed, and how
-long is too long.
+long is too long. A companion document going to the same place is linked as
+`[title](LINK-TBD:file.md)` until it has a URL.
 
 Both questions are cheap to ask and expensive to get wrong.
 

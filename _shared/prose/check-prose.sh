@@ -233,11 +233,24 @@ echo "-- positional references"
 pos=$(grep -nioE "the (middle|first|second|last|left|right) (column|table|row|section)|the section above|the table below" "$f" | head -5)
 if [ -n "$pos" ]; then echo "$pos" | sed 's/^/FLAG  /'; flags=$((flags+1)); else echo "none"; fi
 
-echo "-- internal references"
-int=$(grep -noE "local/[A-Za-z0-9._/-]+|audit-notes/[A-Za-z0-9._/-]+|\`[A-Za-z0-9._/-]+\.md\`" "$f" | head -5)
-if [ -n "$int" ]; then
-    echo "$int" | sed 's/^/FLAG  /'
+echo "-- file paths"
+# Link targets, backticked tokens with a slash or .md, and absolute local paths; URLs and
+# LINK-TBD placeholders are excluded.
+paths=$(grep -noE "\]\([^)]+\)|\`[^\`[:space:]]*(/|\.md)[^\`[:space:]]*\`|(~|/Users|/home|/tmp|/private)/[^[:space:])\`]*" "$f" \
+    | grep -vE "://|\]\((#|mailto:|LINK-TBD:)" | head -5)
+if [ -n "$paths" ]; then
+    echo "$paths" | sed 's/^/FLAG  /'
     echo "      (ignore if this document stays in the repo)"
+    flags=$((flags+1))
+else
+    echo "none"
+fi
+
+echo "-- pending links"
+tbd=$(grep -noE "\]\(LINK-TBD:[^)]*\)" "$f" | head -5)
+if [ -n "$tbd" ]; then
+    echo "$tbd" | sed 's/^/FLAG  /'
+    echo "      (replace with the real URL after upload)"
     flags=$((flags+1))
 else
     echo "none"

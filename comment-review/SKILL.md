@@ -19,7 +19,7 @@ Check every comment a change adds against the rules, and report. The rules live 
    ```bash
    <this-skill-dir>/scripts/extract-comments.py <base> [paths…] > <scratch>/comments.txt
    ```
-   Write to a scratch or `local/` file, not the transcript. Each block is `### S|T path:start-end` (S source, T test) followed by its text. The count goes to stderr.
+   Write to a scratch file or the working-files location in the user's agent instructions, not the transcript. Each block is `### S|T path:start-end` (S source, T test) followed by its text. The count goes to stderr.
 2. **Read the list, then the code around anything doubtful.** A comment's truth depends on the code under it; the list alone can't show a comment the change made stale.
 3. **Classify each block** against the rules. What to look for:
 
@@ -50,6 +50,6 @@ Then:
 - **Left alone (local idiom):** each pattern and the evidence.
 - **Summary:** blocks checked, findings, and the one or two worth fixing first.
 
-Direct invocation renders in the terminal. When running as a delegated subagent, write the report under `local/` and return a summary under ~300 words plus the path.
+Direct invocation renders in the terminal. When running as a delegated subagent, write the report to the output path the brief names, else to the working-files location in the user's agent instructions, and return a summary under ~300 words plus the path. With neither, return the full report.
 
 Do not edit. Offer to apply the fixes; the caller decides.
