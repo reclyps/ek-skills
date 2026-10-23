@@ -30,6 +30,18 @@ if grep -Eiq '^#{2,4} .*(session|[0-9]{4}-[0-9]{2}-[0-9]{2})' "$file"; then
     fail "dated or per-session heading found; session history goes in LOG.md"
 fi
 
+untiered="$(awk '
+    /^## / { in_next = ($0 == "## Next actions"); next }
+    /<!--/ { in_comment = 1 }
+    in_comment { if (/-->/) in_comment = 0; next }
+    in_next && /^[0-9]+\. / && !/(deep|standard|light) \/ (high|medium|low)/ { print }
+' "$file")"
+if [ -n "$untiered" ]; then
+    while IFS= read -r action; do
+        fail "next action lacks '<deep|standard|light> / <high|medium|low>': $action"
+    done <<< "$untiered"
+fi
+
 if [ "$errors" -gt 0 ]; then
     exit 1
 fi

@@ -53,7 +53,7 @@ These hold in every mode, and `scripts/check.sh <path-to-STATE.md>` enforces the
   - *standard*: implementation from an agreed plan
   - *light*: the fastest, lowest-cost model, for status checks, polling, doc lookups, and mechanical edits
 
-  Effort (high / medium / low) applies where the harness supports it.
+  Effort (high / medium / low) applies where the harness supports it. Write each as `<tier> / <effort>`. When the user's agent instructions map tiers to models, name the model too when reporting a tier.
 - **Decisions are not relitigated.** A recorded decision changes only when the user says so.
 - **Write only what a reader can't derive.** Leave out anything git, the tracker, or a CLI can answer.
 
