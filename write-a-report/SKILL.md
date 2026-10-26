@@ -1,6 +1,6 @@
 ---
 name: write-a-report
-description: Produce the two-document deliverable for a large research question the user has been assigned — a one-page memo for a decision-maker plus a reference document citing every finding — with argument sign-off before drafting and fresh-context rewrite and fact-check passes. Use only when the user names this skill or explicitly asks for a memo with a backing document. Not for Confluence pages, status notes, comparison tables, ticket write-ups or other ordinary write-ups; write those directly. Not for tickets (write-a-ticket), PRDs (write-a-prd), ADRs (adr), or the research itself (research).
+description: Produce the two-document deliverable for a large research question the user has been assigned — a one-page memo for a decision-maker plus a reference document citing every finding — with argument sign-off before drafting and fresh-context rewrite and fact-check passes. Use only when the user names this skill or explicitly asks for a memo with a backing document. Not for Confluence pages, status notes, comparison tables, ticket write-ups or other ordinary write-ups; write those directly. Not for tickets (write-a-ticket), PRDs, ADRs (adr), or the research itself (research).
 disable-model-invocation: true
 ---
 
