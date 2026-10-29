@@ -15,7 +15,7 @@ the review to.
 
 - **Target:** whole codebase if unspecified
 - **Principles:** all 5 evaluated
-- **Output:** rendered in terminal (write to file if user requests)
+- **Output:** rendered in terminal (write to file if user requests); a delegated run writes to the output path the brief names, else the working-files location, and returns a summary under ~300 words plus the path
 - **Ratings:** Strong / Moderate / Weak per principle (see [Rating semantics](#rating-semantics))
 - **Recommendations:** scaled to the size and scope of what's being reviewed — no minimum, no padding (see [Scoping recommendations](#scoping-recommendations))
 - **Surrounding code:** read imports, consumers, config, and the immediate surroundings of any code you'd recommend changing — verify the recommendation fits the existing context before proposing it
@@ -32,6 +32,8 @@ For PR/branch targets, the review is about the *changeset*, not the full state o
 ## Investigation workflow
 
 Scale the investigation to the target. A full parallel sweep on a 3-file PR tends to surface concerns that are out of scope for the changeset.
+
+When the user invokes this directly on a PR or branch, delegate the review to a fresh-context subagent on a top-tier model at high effort, unless you are already running in one. Brief it with the base, the absolute path to `CUPID-PRINCIPLES.md`, any scope the user narrowed, and the output path. For directory or whole-codebase targets, keep the fan-out below on the main thread.
 
 If you are already running inside a subagent (e.g. a caller delegated this evaluation to an isolated context), skip the internal fan-out and read the target directly — you already have a clean, scoped context, and nesting further agents adds cost without benefit.
 
@@ -94,4 +96,4 @@ The most valuable cross-cutting actions, ranked by impact. Count is flexible —
 
 ## File output
 
-If the user requests file output, write the evaluation to the path they specify (or default to `cupid-evaluation.md` in the project root). Do not create a file unless requested.
+If the user requests file output, write the evaluation to the path they specify (or default to `cupid-evaluation.md` in the project root). Otherwise, do not create a file unless running as a delegated subagent. To apply fixes, work from the report file, not the summary.

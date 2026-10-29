@@ -46,6 +46,6 @@ Then:
 - **Left alone (local idiom):** each pattern and the evidence.
 - **Summary:** files checked, findings, and the one or two worth fixing first.
 
-Direct invocation renders in the terminal. When delegating, use a mid-tier model at default effort; the top tier for large or cross-module changes. The smallest tier misses abstraction-level calls. A delegated run writes the report to the output path the brief names, else to the working-files location in the user's agent instructions, and returns a summary under ~300 words plus the path. With neither, it returns the full report.
+When the user invokes this directly, delegate it to a fresh-context subagent, unless you are already running in one. Brief it with the base, any scope the user narrowed, and the output path. Use a mid-tier model at default effort; the top tier for large or cross-module changes. The smallest tier misses abstraction-level calls. Where the harness has no subagents, run it inline and render the report in the terminal. A delegated run writes the report to the output path the brief names, else to the working-files location in the user's agent instructions, and returns a summary under ~300 words plus the path. With neither, it returns the full report.
 
-Do not edit, and do not post to the PR. Offer to apply the fixes or draft PR comments; the caller decides.
+Do not edit, and do not post to the PR. Offer to apply the fixes or draft PR comments; the caller decides. To apply fixes, work from the report file, not the summary.

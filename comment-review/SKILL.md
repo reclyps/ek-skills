@@ -50,6 +50,6 @@ Then:
 - **Left alone (local idiom):** each pattern and the evidence.
 - **Summary:** blocks checked, findings, and the one or two worth fixing first.
 
-Direct invocation renders in the terminal. When running as a delegated subagent, write the report to the output path the brief names, else to the working-files location in the user's agent instructions, and return a summary under ~300 words plus the path. With neither, return the full report.
+When the user invokes this directly, delegate it to a fresh-context subagent on a mid-tier model, unless you are already running in one. Brief it with the base, any scope the user narrowed, and the output path. Where the harness has no subagents, run it inline and render the report in the terminal. When running as a delegated subagent, write the report to the output path the brief names, else to the working-files location in the user's agent instructions, and return a summary under ~300 words plus the path. With neither, return the full report.
 
-Do not edit. Offer to apply the fixes; the caller decides.
+Do not edit. Offer to apply the fixes; the caller decides. To apply fixes, work from the report file, not the summary.
