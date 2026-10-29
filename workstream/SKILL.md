@@ -1,7 +1,7 @@
 ---
 name: workstream
-description: "Give any piece of work, from a single-session task to a multi-month epic, its own folder holding a small state file and every working file the work produces, so it stays organized and resumable. Three modes: init creates the workstream from a template, park records where things stand at the end of a session, resume picks it back up in a fresh session. Use when the user invokes /workstream."
-argument-hint: "init <name> | park [name] | resume [name]"
+description: "Give any piece of work, from a single-session task to a multi-month epic, its own folder holding a small state file and every working file the work produces, so it stays organized and resumable. Four modes: init creates the workstream from a template, park records where things stand at the end of a session, resume picks it back up in a fresh session, archive moves finished work out of the repository. Use when the user invokes /workstream."
+argument-hint: "init <name> | park [name] | resume [name] | archive [name]"
 disable-model-invocation: true
 ---
 
@@ -27,6 +27,7 @@ A workstream is a folder for one piece of work, of any size. It holds the work's
 | `/workstream init <name>` | Follow [init.md](init.md) |
 | `/workstream park [name]` | Follow [park.md](park.md) |
 | `/workstream resume [name]` | Follow [resume.md](resume.md) |
+| `/workstream archive [name]` | Follow [archive.md](archive.md) |
 | `/workstream` with no mode | List workstreams: for each folder, its `Updated` and `Status` lines. Then ask which mode |
 
 When `[name]` is omitted: use the workstream already resumed or initialized in this session; otherwise the only one whose status is not `done`; otherwise list them and ask.
@@ -39,6 +40,8 @@ Run `scripts/locate.sh [--root <dir>] [name]`. It prints the absolute path. Pass
 2. A workstreams location stated in the project's or user's agent instructions.
 
 Otherwise the script defaults to `.workstreams/` at the root of the repository's main checkout, so every worktree of a repo shares the same workstreams, and outside a git repository it uses the current directory. A relative `--root` resolves against the same base.
+
+Archives live outside the repository, under a root the user configures: `--root`, else `WORKSTREAM_ARCHIVE_ROOT`. See [archive.md](archive.md).
 
 ## Rules for STATE.md
 
